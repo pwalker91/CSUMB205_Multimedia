@@ -87,15 +87,18 @@ class RGBImage(object):
     def __init__(self, filename="", saveTo=""):
         if not filename:
             self.inputFilename = askopenfilename( initialdir = os.path.expanduser("~"),
-                                                title = "Select the FILE containing the raw data",
-                                                multiple = False)
-        '''askdirectory( initialdir = os.path.expanduser("~"),
-                            title = "Select the FOLDER containing the raw data",
-                            mustexist = True)'''
-        self.inputFilename = filename
-        if saveTo == "":
-            self.outputFilename = filename.rsplit(".",1)[0]+"_v2"+filename.rsplit(".",1)[1]
-        __myImage = Image.open(filename)
+                                        title = "Select the FILE containing the raw data",
+                                        multiple = False)
+        else:
+            self.inputFilename = filename
+        #END IF/ELSE
+        if not saveTo:
+            self.outputFilename = (self.inputFilename.rsplit(".",1)[0] + "_v2." +
+                                    self.inputFilename.rsplit(".",1)[1])
+        else:
+            self.outputFilename = saveTo
+        #END IF/ELSE
+        __myImage = Image.open(self.inputFilename)
         self.mode = __myImage.mode
         if self.mode != "RGB":
             raise StandardError("This image must be made up of RGB pixels")
@@ -123,7 +126,7 @@ class RGBImage(object):
     # DESC: ..
     #       ..
     def save(self, filename=""):
-        if filename != "":
+        if filename:
             self.outputFilename = filename
         Image.fromarray(self.pixels).save(self.outputFilename)
     #END DEF
@@ -135,3 +138,7 @@ class RGBImage(object):
                 "Size is "+str(self.width)+"x"+str(self.height)+" pixels")
     #END DEF
 #END CLASS
+
+'''askdirectory( initialdir = os.path.expanduser("~"),
+            title = "Select the FOLDER containing the raw data",
+            mustexist = True)'''
