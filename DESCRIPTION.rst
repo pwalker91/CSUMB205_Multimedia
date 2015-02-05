@@ -12,7 +12,7 @@ Python usage
 ===========================================================
 The interface is very simple::
       #This is how you import the necessary class
-    from SimpleImage import RGBImage
+    from SimpleImage.ImageClass import RGBImage
 
       #This is how you actually create an object
     myImage = RGBImage("/absolute/path/to/your/image")
