@@ -20,7 +20,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/pwalker91/CST205-PIL-Wrapper',
+    url='https://github.com/pwalker91/CSUMB205_Image',
 
     # Author details
     author='Peter Walker',
