@@ -11,7 +11,7 @@ longer updated for Python 3, this package relies on Pillow.
 Python usage
 ============
 The interface is very simple::
-    from CST205_Image import RGBImage
+    from SimpleImage import RGBImage
 
     myImage = RGBImage("/absolute/path/to/your/image")
 
