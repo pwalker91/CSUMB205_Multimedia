@@ -1,0 +1,4 @@
+py setup.py sdist
+twine upload dist/CSUMB205_Image-0.5.2.tar.gz
+
+pip3 install --upgrade CSUMB205_Image
