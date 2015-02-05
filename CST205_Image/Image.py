@@ -20,64 +20,52 @@ import os
 import sys
 import subprocess
 from tkinter.filedialog import (askdirectory, askopenfilename)
-
-try:
-    from PIL import Image
-except ImportError:
-    subprocess.check_call("pip3 install Pillow", shell = True)
-    from PIL import Image
-#END TRY/EXCEPT
+from PIL import Image
 #END IMPORTS
 
 
 
 #CLASS
 class RGBPixel(object):
-    r = 0; g = 0; b = 0
+    __red = 0
+    __green = 0
+    __blue = 0
     x=0; y=0
     #DESC: Initializes the object
     def __init__(self,r=0,g=0,b=0, x=0, y=0):
-        self.r = r
-        while (self.r>255):
-            self.r = self.r-256
-        self.g = g
-        while (self.g>255):
-            self.g = self.g-256
-        self.b = b
-        while (self.b>255):
-            self.b = self.b-256
+        self.__red = r
+        self.__green = g
+        self.__blue = b
+        self.checkVals()
         self.x = x
         self.y = y
 
     def checkVals(self):
-        while (self.r>255):
-            self.r = self.r-256
-        while (self.g>255):
-            self.g = self.g-256
-        while (self.b>255):
-            self.b = self.b-256
+        while (self.__red>255):
+            self.__red = self.__red-256
+        while (self.__green>255):
+            self.__green = self.__green-256
+        while (self.__blue>255):
+            self.__blue = self.__blue-256
 
-    def setR(self, val):
-        self.r = val
-        while (self.r>255):
-            self.r = self.r-256
+    def setRed(self, val):
+        self.__red = val
+        self.checkVals()
 
-    def setG(self, val):
-        self.g = val
-        while (self.g>255):
-            self.g = self.g-256
+    def setGreen(self, val):
+        self.__green = val
+        self.checkVals()
 
-    def setB(self, val):
-        self.b = val
-        while (self.b>255):
-            self.b = self.b-256
+    def setBlue(self, val):
+        self.__blue = val
+        self.checkVals()
 
-    def as_tuple(self):
-        return (self.r, self.g, self.b)
+    def __as_tuple(self):
+        return (self.__red, self.__green, self.__blue)
 
     def __str__(self):
         return ("Pixel at ("+str(self.x)+","+str(self.y)+"): "+
-                "RED="+str(self.r)+", GREEN="+str(self.g)+", BLUE="+str(self.b))
+                "RED="+str(self.__red)+", GREEN="+str(self.__green)+", BLUE="+str(self.__blue))
 #END CLASS
 
 
@@ -92,7 +80,7 @@ class RGBImage(object):
     width = 0
     height = 0
 
-    myPixels = []
+    pixels = []
     # ---------------------
 
     #DESC: Initializes the object
@@ -105,7 +93,8 @@ class RGBImage(object):
                             title = "Select the FOLDER containing the raw data",
                             mustexist = True)'''
         self.inputFilename = filename
-        self.outputFilename = saveTo
+        if saveTo == "":
+            self.outputFilename = filename.rsplit(".",1)[0]+"_v2"+filename.rsplit(".",1)[1]
         __myImage = Image.open(filename)
         self.mode = __myImage.mode
         if self.mode != "RGB":
@@ -114,7 +103,7 @@ class RGBImage(object):
         self.size = self.width * self.height
         counter = 0
         for pixel in list(__myImage.getdata()):
-            self.myPixels.append(RGBPixel(*pixel, x=counter%self.width, y=int(counter/self.width)))
+            self.pixels.append(RGBPixel(*pixel, x=counter%self.width, y=int(counter/self.width)))
             counter+=1
         #END FOR
     #END DEF
@@ -128,7 +117,7 @@ class RGBImage(object):
             raise ValueError("This pixel location is not within this picture bounds.")
         if (x+(self.height*y) > self.size):
             raise ValueError("This pixel location is not within this picture bounds.")
-        return self.myPixels[x+(self.height*y)]
+        return self.pixels[x+(self.height*y)]
     #END DEF
 
     # DESC: ..
@@ -136,7 +125,7 @@ class RGBImage(object):
     def save(self, filename=""):
         if filename != "":
             self.outputFilename = filename
-        Image.fromarray(self.myPixels).save(self.outputFilename)
+        Image.fromarray(self.pixels).save(self.outputFilename)
     #END DEF
 
     # DESC: ..
