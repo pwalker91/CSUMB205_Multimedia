@@ -19,6 +19,7 @@ CLASSES-
 import os
 import sys
 import subprocess
+from numpy import asarray
 from tkinter.filedialog import (askdirectory, askopenfilename)
 from PIL import Image
 #END IMPORTS
@@ -31,8 +32,18 @@ class RGBPixel(object):
     __green = 0
     __blue = 0
     x=0; y=0
-    #DESC: Initializes the object
-    def __init__(self,r=0,g=0,b=0, x=0, y=0):
+
+    def __init__(self, r=0,g=0,b=0, x=0,y=0):
+        """
+        Object initialization
+        ARGS:
+            self        this Object
+            r   .
+            g   .
+            b   .
+            x   .
+            y   .
+        """
         self.__red = r
         self.__green = g
         self.__blue = b
@@ -51,17 +62,60 @@ class RGBPixel(object):
     def setRed(self, val):
         self.__red = val
         self.checkVals()
+    def getRed(self):
+        return self.__red
 
     def setGreen(self, val):
         self.__green = val
         self.checkVals()
+    def getGreen(self):
+        return self.__green
 
     def setBlue(self, val):
         self.__blue = val
         self.checkVals()
+    def getBlue(self):
+        return self.__blue
 
-    def __as_tuple(self):
+    def _as_array(self):
+        return [self.__red, self.__green, self.__blue]
+
+    def _as_tuple(self):
         return (self.__red, self.__green, self.__blue)
+
+    def cdist(self, **kwargs):
+        """
+        Gets the color distance between this pixel and a specified color or pixel object
+        ARGS:
+            color   tuple, 3 integer values where 0<=x<=255
+            pixel   an RGBPixel object
+        """
+        if not any( [elem in kwargs for elem in ["color", "pixel"]] ):
+            raise KeyError("You must pass either a color or pixel through the keywords 'color' or 'pixel'")
+        if "color" in kwargs:
+            if not isinstance(color, tuple) and len(color) != 3:
+                raise ValueError("You must give an RGB value as a tuple (r,g,b) to 'color'")
+        elif "pixel" in kwargs:
+            if (self.__class__ != pixel.__class__):
+                raise ValueError("You must give an RGBPixel object to 'pixel'")
+        #END IF/ELIF
+        if "color" in kwargs:
+            givenR, givenG, givenB = kwargs['color']
+        elif "pixel" in kwargs:
+            givenR, givenG, givenB = kwargs['pixel']._as_tuple()
+        rDist = givenR-self.__red
+        gDist = givenG-self.__green
+        bDist = givenB-self.__blue
+        return ((rDist+gDist+bDist)/3.0)
+
+    def ldist(self, pixel):
+        """Returns the length distance between two RGBPixels"""
+        if not isinstance(pixel, self.__class__):
+            raise ValueError("You must pass an RGBPixel to this function")
+        xDist = pixel.x-self.x
+        yDist = pixel.y-self.y
+        from math import sqrt
+        return sqrt(xDist**2 + yDist**2)
 
     def __str__(self):
         return ("Pixel at ("+str(self.x)+","+str(self.y)+"): "+
@@ -75,65 +129,147 @@ class RGBImage(object):
     # Class Attributes
     inputFilename = ""
     outputFilename = ""
-    mode = ""
-    size = 0
-    width = 0
-    height = 0
 
+    __myImage = None
     pixels = []
+
+    height = 0
+    width = 0
     # ---------------------
 
-    #DESC: Initializes the object
-    def __init__(self, filename="", saveTo=""):
-        if not filename:
-            self.inputFilename = askopenfilename( initialdir = os.path.expanduser("~"),
-                                        title = "Select the FILE containing the raw data",
-                                        multiple = False)
+    def __init__(self, filename="", saveTo="", blank=False, width=100, height=100):
+        """
+        Object initialization
+        ARGS:
+            self        this Object
+            filename    String, the location of the picture
+            saveTo      String, the location that this picture will be saved to
+            blank       Boolean, whether this image should be a blank image
+                width   Integer, the width of the blank image
+                height  Integer, the height of the blank image
+        """
+        self.pixels = []
+        if not blank:
+            if not filename:
+                self.inputFilename = askopenfilename( initialdir = os.path.expanduser("~"),
+                                            title = "Select the FILE containing the raw data",
+                                            multiple = False)
+            else:
+                self.inputFilename = os.path.abspath(filename)
+                if not os.path.isfile(self.inputFilename) or \
+                        self.inputFilename.split(".")[-1].lower() not in ["jpg","jpeg","png","gif"]:
+                    raise ValueError("You must pass in a legitimate picture file")
+            #END IF/ELSE
+            if not saveTo:
+                self.outputFilename = (self.inputFilename.rsplit(".",1)[0] + "_v2." +
+                                        self.inputFilename.rsplit(".",1)[1])
+            else:
+                self.outputFilename = os.path.abspath(saveTo)
+            #END IF/ELSE
+            if os.path.isfile(self.outputFilename):
+                print("'{}' will be overwritten if this file is saved. "+
+                    "Consider saving to another location.".format(self.outputFilename.split("/").split("\\")[-1]))
+            #END IF
+            self.__myImage = Image.open(self.inputFilename)
         else:
-            self.inputFilename = filename
+            self.__myImage = Image.new("RGB", (width, height))
         #END IF/ELSE
-        if not saveTo:
-            self.outputFilename = (self.inputFilename.rsplit(".",1)[0] + "_v2." +
-                                    self.inputFilename.rsplit(".",1)[1])
-        else:
-            self.outputFilename = saveTo
-        #END IF/ELSE
-        __myImage = Image.open(self.inputFilename)
-        self.mode = __myImage.mode
-        if self.mode != "RGB":
-            raise StandardError("This image must be made up of RGB pixels")
-        self.width, self.height = __myImage.size
-        self.size = self.width * self.height
-        counter = 0
-        for pixel in list(__myImage.getdata()):
-            self.pixels.append(RGBPixel(*pixel, x=counter%self.width, y=int(counter/self.width)))
-            counter+=1
+
+        #The results of calling asarray() on the now created Image object is a 4-dimensional
+        # array. The original array is made up of rows, each row is made up of pixels, and
+        # each pixel is a set of 3 values (R,G,B of the pixel)
+        tmpPixels = asarray(self.__myImage)
+        #Now we are going to mirror the structure of the return of asarray(), only each
+        # pixels will now be an object
+        rowCount = 0
+        for row in tmpPixels:
+            self.pixels.append([])
+            colCount = 0
+            for pixel in row:
+                self.pixels[-1].append( RGBPixel(*pixel, x=colCount, y=rowCount) )
+                colCount+=1
+            #END FOR
+            rowCount+=1
         #END FOR
+
+        #Setting some other useful variables for users
+        self.width, self.height = self.__myImage.size
+
+        #Finally closing the image
+        self.__myImage.close()
     #END DEF
 
-    # DESC: ..
-    #       ..
     def getPixel(self, x, y):
+        """
+        Gets an RGBPixel object at the specified (x,y) coordinate
+        ARGS:
+            self    this Object
+            x       The X coordinate of the pixel
+            y       The Y coordinate of the pixel
+        RETURNS:
+            RGBPixel object
+        RAISES:
+            ValueError - 'x' or 'y' is out of the picture's bounds
+        """
         if (x>self.width):
             raise ValueError("This pixel location is not within this picture bounds.")
         if (y>self.height):
             raise ValueError("This pixel location is not within this picture bounds.")
-        if (x+(self.height*y) > self.size):
-            raise ValueError("This pixel location is not within this picture bounds.")
-        return self.pixels[x+(self.height*y)]
+        return self.pixels[y][x]
     #END DEF
 
-    # DESC: ..
-    #       ..
-    def save(self, filename=""):
+    def save(self, filename="", forceOverwrite=False):
+        """
+        This will save the current object to a specified location
+        ARGS:
+            self            this Object
+            filename        OPTIONAL. String, the location to be save to.
+            forceOverwrite  OPTIONAL. Boolean, whether to force overwrite of file
+                             at location 'filename' or 'self.outputFilename'
+        RETURNS:
+            none
+        RAISES:
+            none.
+            Will ask user if they wish to overwrite a file if it exists at the given
+             location in filename, or at self.outputFilename
+        """
         if filename:
-            self.outputFilename = filename
-        Image.fromarray(self.pixels).save(self.outputFilename)
+            self.outputFilename = os.path.abspath(filename)
+        if os.path.isfile(self.outputFilename) and not forceOverwrite:
+            overwrite = input("{} will be overwritten. Continue? (y/n) ".format(self.outputFilename))
+            if overwrite.lower() != "y":
+                return
+        #END IF
+        #array needs to be an array of rows, each row needs to be an array of
+        # pixels, and each pixel an array of pixel values (R,G,B)
+        img_to_array = asarray(self.__as_array())
+        Image.fromarray(img_to_array).save(self.outputFilename)
+        del img_to_array
     #END DEF
 
-    # DESC: ..
-    #       ..
+    def show(self):
+        """Shows the image the user is currently working on"""
+        img_to_array = asarray(self.__as_array())
+        Image.fromarray(img_to_array).show()
+        del img_to_array
+    #END DEF
+
+    def __as_array(self):
+        """
+        Converts the 3-dimensional array of pixel objects into a 4-dimensional
+         array of RGB values (each pixel object is converted to an array)
+        """
+        tempArray = []
+        for row in self.pixels:
+            tempArray.append([])
+            for pixel in row:
+                tempArray[-1].append(pixel._as_array)
+        #END FOR
+        return tempArray
+    #END DEF
+
     def __str__(self):
+        """Returns a string representation of this object"""
         return ("RGB Image named "+self.inputFilename.split("/")[-1].split("\\")[-1]+"\n"+
                 "Size is "+str(self.width)+"x"+str(self.height)+" pixels")
     #END DEF
