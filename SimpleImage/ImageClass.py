@@ -19,7 +19,7 @@ CLASSES-
 import os
 import sys
 import subprocess
-from numpy import asarray
+from numpy import asarray, uint8
 from tkinter.filedialog import (askdirectory, askopenfilename)
 from PIL import Image
 #END IMPORTS
@@ -129,8 +129,8 @@ class RGBPixel(object):
     #END DEF
 
     def __str__(self):
-        return ("Pixel at ("+str(self.x)+","+str(self.y)+"): "+
-                "RED="+str(self.__red)+", GREEN="+str(self.__green)+", BLUE="+str(self.__blue))
+        return ("Pixel at ({},{}): ".format(self.x, self.y)+
+                "RED={}}, GREEN={}}, BLUE={}".format(self.__red, self.__green, self.__blue))
     #END DEF
 #END CLASS
 
@@ -180,8 +180,10 @@ class RGBImage(object):
                 self.outputFilename = os.path.abspath(saveTo)
             #END IF/ELSE
             if os.path.isfile(self.outputFilename):
-                print("'{}' will be overwritten if this file is saved. "+
-                    "Consider saving to another location.".format(self.outputFilename.split("/").split("\\")[-1]))
+                shortOutput = self.outputFilename.split("/")[-1].split("\\")[-1]
+                print("{} will be overwritten if this file is saved. ".format(shortOutput)+
+                        "Consider saving to another location."
+                    )
             #END IF
             self.__myImage = Image.open(self.inputFilename)
         else:
@@ -207,9 +209,6 @@ class RGBImage(object):
 
         #Setting some other useful variables for users
         self.width, self.height = self.__myImage.size
-
-        #Finally closing the image
-        self.__myImage.close()
     #END DEF
 
     def getPixel(self, *args):
@@ -261,7 +260,7 @@ class RGBImage(object):
         if filename:
             self.outputFilename = os.path.abspath(filename)
         if os.path.isfile(self.outputFilename) and not forceOverwrite:
-            overwrite = input("{} will be overwritten. Continue? (y/n) ".format(self.outputFilename))
+            overwrite = input( "{} will be overwritten. Continue? (y/n) ".format(self.outputFilename) )
             if overwrite.lower() != "y":
                 return
         #END IF
@@ -269,7 +268,7 @@ class RGBImage(object):
         # pixels, and each pixel an array of pixel values (R,G,B)
         img_to_array = asarray(self.__as_array())
         Image.fromarray(img_to_array).save(self.outputFilename)
-        del img_to_array
+        print("File saved at {}".format(self.outputFilename))
     #END DEF
 
     def show(self):
@@ -288,14 +287,18 @@ class RGBImage(object):
         for row in self.pixels:
             tempArray.append([])
             for pixel in row:
-                tempArray[-1].append(pixel._as_array)
+                init_arr = pixel._as_array()
+                append_arr = [uint8(rgbVal) for rgbVal in init_arr]
+                tempArray[-1].append(append_arr)
         #END FOR
         return tempArray
     #END DEF
 
     def __str__(self):
         """Returns a string representation of this object"""
-        return ("RGB Image named "+self.inputFilename.split("/")[-1].split("\\")[-1]+"\n"+
-                "Size is "+str(self.width)+"x"+str(self.height)+" pixels")
+        shortInput = self.inputFilename.split("/")[-1].split("\\")[-1]
+        print(shortInput)
+        return ("RGB Image named {}\nSize is {}x{} pixels".format(shortInput, self.width, self.height)
+                )
     #END DEF
 #END CLASS
