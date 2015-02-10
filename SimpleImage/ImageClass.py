@@ -37,12 +37,12 @@ class RGBPixel(object):
         """
         Object initialization
         ARGS:
-            self        this Object
-            r   .
-            g   .
-            b   .
-            x   .
-            y   .
+            self    this Object
+            r       A pixel value for the Red aspect
+            g       A pixel value for the Green aspect
+            b       A pixel value for the Blue aspect
+            x       The X-part of the this pixel's location within the picture
+            y       The Y-part of the this pixel's location within the picture
         """
         self.__red = r
         self.__green = g
@@ -58,6 +58,7 @@ class RGBPixel(object):
             self.__green = self.__green-256
         while (self.__blue>255):
             self.__blue = self.__blue-256
+    #END DEF
 
     def setRed(self, val):
         self.__red = val
@@ -79,7 +80,6 @@ class RGBPixel(object):
 
     def _as_array(self):
         return [self.__red, self.__green, self.__blue]
-
     def _as_tuple(self):
         return (self.__red, self.__green, self.__blue)
 
@@ -89,14 +89,20 @@ class RGBPixel(object):
         ARGS:
             color   tuple, 3 integer values where 0<=x<=255
             pixel   an RGBPixel object
+        RETURNS:
+            A Float, that is this pixel's color's distance to the given RGBPixel or
+             color tuple.
+            A negative number means that this pixel will likely be lighter, while
+             a positive number means that this pixel will likely be darker
         """
         if not any( [elem in kwargs for elem in ["color", "pixel"]] ):
             raise KeyError("You must pass either a color or pixel through the keywords 'color' or 'pixel'")
         if "color" in kwargs:
-            if not isinstance(color, tuple) and len(color) != 3:
+            if not (isinstance(kwargs['color'], tuple) or isinstance(kwargs['color'], list)) \
+                    and len(kwargs['color']) != 3:
                 raise ValueError("You must give an RGB value as a tuple (r,g,b) to 'color'")
         elif "pixel" in kwargs:
-            if (self.__class__ != pixel.__class__):
+            if (self.__class__ != kwargs['pixel'].__class__):
                 raise ValueError("You must give an RGBPixel object to 'pixel'")
         #END IF/ELIF
         if "color" in kwargs:
@@ -107,20 +113,27 @@ class RGBPixel(object):
         gDist = givenG-self.__green
         bDist = givenB-self.__blue
         return ((rDist+gDist+bDist)/3.0)
+    #END DEF
 
     def ldist(self, pixel):
-        """Returns the length distance between two RGBPixels"""
+        """
+        Returns the length distance between two RGBPixels according to their
+         X and Y values.
+        """
         if not isinstance(pixel, self.__class__):
             raise ValueError("You must pass an RGBPixel to this function")
         xDist = pixel.x-self.x
         yDist = pixel.y-self.y
         from math import sqrt
         return sqrt(xDist**2 + yDist**2)
+    #END DEF
 
     def __str__(self):
         return ("Pixel at ("+str(self.x)+","+str(self.y)+"): "+
                 "RED="+str(self.__red)+", GREEN="+str(self.__green)+", BLUE="+str(self.__blue))
+    #END DEF
 #END CLASS
+
 
 
 #CLASS
@@ -199,22 +212,34 @@ class RGBImage(object):
         self.__myImage.close()
     #END DEF
 
-    def getPixel(self, x, y):
+    def getPixel(self, *args):
         """
         Gets an RGBPixel object at the specified (x,y) coordinate
         ARGS:
             self    this Object
             x       The X coordinate of the pixel
             y       The Y coordinate of the pixel
+                or
+            (x,y)   The X and Y coordinate within a tuple or list
         RETURNS:
             RGBPixel object
         RAISES:
             ValueError - 'x' or 'y' is out of the picture's bounds
         """
-        if (x>self.width):
-            raise ValueError("This pixel location is not within this picture bounds.")
-        if (y>self.height):
-            raise ValueError("This pixel location is not within this picture bounds.")
+        #Getting the X and Y from the passed arguments
+        if (isinstance(args[0], tuple) or isinstance(args[0], list)) and len(args[0])>1:
+            x,y = args[0]
+            if not(isinstance(x,int) and isinstance(y,int)):
+                raise ValueError("The first two elements of the tuple you passed were not integers")
+        elif (isinstance(args[0],int) and isinstance(args[1],int)):
+            if (args[0]>self.width):
+                raise ValueError("This pixel location is not within this picture bounds.")
+            if (args[1]>self.height):
+                raise ValueError("This pixel location is not within this picture bounds.")
+            x = args[0]
+            y = args[1]
+        else:
+            raise ValueError("You must either pass in a 2-tuple of integers, or two integers")
         return self.pixels[y][x]
     #END DEF
 
@@ -274,7 +299,3 @@ class RGBImage(object):
                 "Size is "+str(self.width)+"x"+str(self.height)+" pixels")
     #END DEF
 #END CLASS
-
-'''askdirectory( initialdir = os.path.expanduser("~"),
-            title = "Select the FOLDER containing the raw data",
-            mustexist = True)'''
