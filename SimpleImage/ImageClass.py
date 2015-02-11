@@ -10,7 +10,8 @@ PURPOSE-  This module will be used by CST 205 for image manipulation. It
             by calling 'pip3 install Pillow')
 
 CLASSES-
-    ..
+    rgbPixel
+    rgbImage
 -------------------------------------------------------------------------------
 """
 
@@ -27,11 +28,12 @@ from PIL import Image
 
 
 #CLASS
-class RGBPixel(object):
+class rgbPixel(object):
     __red = 0
     __green = 0
     __blue = 0
-    x=0; y=0
+    x=0
+    y=0
 
     def __init__(self, r=0,g=0,b=0, x=0,y=0):
         """
@@ -106,9 +108,9 @@ class RGBPixel(object):
         Gets the color distance between this pixel and a specified color or pixel object
         ARGS:
             color   tuple, 3 integer values where 0<=x<=255
-            pixel   an RGBPixel object
+            pixel   an rgbPixel object
         RETURNS:
-            A Float, that is this pixel's color's distance to the given RGBPixel or
+            A Float, that is this pixel's color's distance to the given rgbPixel or
              color tuple.
             A negative number means that this pixel will likely be lighter, while
              a positive number means that this pixel will likely be darker
@@ -121,7 +123,7 @@ class RGBPixel(object):
                 raise ValueError("You must give an RGB value as a tuple (r,g,b) to 'color'")
         elif "pixel" in kwargs:
             if (self.__class__ != kwargs['pixel'].__class__):
-                raise ValueError("You must give an RGBPixel object to 'pixel'")
+                raise ValueError("You must give an rgbPixel object to 'pixel'")
         #END IF/ELIF
         if "color" in kwargs:
             givenR, givenG, givenB = kwargs['color']
@@ -135,11 +137,11 @@ class RGBPixel(object):
 
     def ldist(self, pixel):
         """
-        Returns the length distance between two RGBPixels according to their
+        Returns the length distance between two rgbPixels according to their
          X and Y values.
         """
         if not isinstance(pixel, self.__class__):
-            raise ValueError("You must pass an RGBPixel to this function")
+            raise ValueError("You must pass an rgbPixel to this function")
         xDist = pixel.x-self.x
         yDist = pixel.y-self.y
         from math import sqrt
@@ -147,15 +149,16 @@ class RGBPixel(object):
     #END DEF
 
     def __str__(self):
+        """Returns a string representation of this object"""
         return ("Pixel at ({},{}): ".format(self.x, self.y)+
-                "RED={}}, GREEN={}}, BLUE={}".format(self.__red, self.__green, self.__blue))
+                "RED={}, GREEN={}, BLUE={}".format(self.__red, self.__green, self.__blue))
     #END DEF
 #END CLASS
 
 
 
 #CLASS
-class RGBImage(object):
+class rgbImage(object):
     # ---------------------
     # Class Attributes
     inputFilename = ""
@@ -231,7 +234,7 @@ class RGBImage(object):
 
     def getPixel(self, *args):
         """
-        Gets an RGBPixel object at the specified (x,y) coordinate
+        Gets an rgbPixel object at the specified (x,y) coordinate
         ARGS:
             self    this Object
             x       The X coordinate of the pixel
@@ -239,7 +242,7 @@ class RGBImage(object):
                 or
             (x,y)   The X and Y coordinate within a tuple or list
         RETURNS:
-            RGBPixel object
+            rgbPixel object
         RAISES:
             ValueError - 'x' or 'y' is out of the picture's bounds
         """
@@ -315,7 +318,6 @@ class RGBImage(object):
     def __str__(self):
         """Returns a string representation of this object"""
         shortInput = self.inputFilename.split("/")[-1].split("\\")[-1]
-        print(shortInput)
         return ("RGB Image named {}\nSize is {}x{} pixels".format(shortInput, self.width, self.height)
                 )
     #END DEF
