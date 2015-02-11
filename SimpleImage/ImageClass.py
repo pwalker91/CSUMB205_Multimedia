@@ -182,7 +182,6 @@ class rgbImage(object):
                 width   Integer, the width of the blank image
                 height  Integer, the height of the blank image
         """
-        self.pixels = []
         if not blank:
             if not filename:
                 self.inputFilename = askopenfilename( initialdir = os.path.expanduser("~"),
@@ -211,22 +210,8 @@ class rgbImage(object):
             self.__myImage = Image.new("RGB", (width, height))
         #END IF/ELSE
 
-        #The results of calling asarray() on the now created Image object is a 4-dimensional
-        # array. The original array is made up of rows, each row is made up of pixels, and
-        # each pixel is a set of 3 values (R,G,B of the pixel)
-        tmpPixels = asarray(self.__myImage)
-        #Now we are going to mirror the structure of the return of asarray(), only each
-        # pixels will now be an object
-        rowCount = 0
-        for row in tmpPixels:
-            self.pixels.append([])
-            colCount = 0
-            for pixel in row:
-                self.pixels[-1].append( RGBPixel(*pixel, x=colCount, y=rowCount) )
-                colCount+=1
-            #END FOR
-            rowCount+=1
-        #END FOR
+        #Calls self.reset(), as the reset function does what we want to do initially
+        self.reset()
 
         #Setting some other useful variables for users
         self.width, self.height = self.__myImage.size
@@ -297,6 +282,28 @@ class rgbImage(object):
         img_to_array = asarray(self.__as_array())
         Image.fromarray(img_to_array).show()
         del img_to_array
+    #END DEF
+
+    def reset(self):
+        """Resets this object to the original image"""
+        #The results of calling asarray() on the now created Image object is a 4-dimensional
+        # array. The original array is made up of rows, each row is made up of pixels, and
+        # each pixel is a set of 3 values (R,G,B of the pixel)
+        tmpPixels = asarray(self.__myImage)
+        self.pixels = []
+        #Now we are going to mirror the structure of the return of asarray(), only each
+        # pixels will now be an object
+        rowCount = 0
+        for row in tmpPixels:
+            self.pixels.append([])
+            colCount = 0
+            for pixel in row:
+                R=pixel[0]; G=pixel[1]; B=pixel[2]
+                self.pixels[-1].append( rgbPixel(r=int(R), g=int(G), b=int(B), x=colCount, y=rowCount) )
+                colCount+=1
+            #END FOR
+            rowCount+=1
+        #END FOR
     #END DEF
 
     def __as_array(self):
