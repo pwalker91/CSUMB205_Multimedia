@@ -44,43 +44,61 @@ class RGBPixel(object):
             x       The X-part of the this pixel's location within the picture
             y       The Y-part of the this pixel's location within the picture
         """
-        self.__red = r
-        self.__green = g
-        self.__blue = b
-        self.checkVals()
+        self.setRed(r)
+        self.setRed(g)
+        self.setRed(b)
         self.x = x
         self.y = y
 
-    def checkVals(self):
-        while (self.__red>255):
-            self.__red = self.__red-256
-        while (self.__green>255):
-            self.__green = self.__green-256
-        while (self.__blue>255):
-            self.__blue = self.__blue-256
+    def _checkVals(func):
+        """
+        A decorator that will make sure that the arguments passed are viable.
+        The arguments we are expected are "self", and an integer value between
+         0 and 255.
+        """
+        def wrapper(*args, **kwargs):
+            if not isinstance(args[1], int):
+                raise ValueError("This function requires two positional arguments: ARG #2 must be an integer value.")
+            #Casting args to a list so that we can modify the values (args was originally
+            # a tuple, which is immutable)
+            args = list(args)
+            #This will make sure that the value is between 0 and 255, by iteratively
+            # adding or subtracting 256
+            while args[1] > 255 or args[1] < 0:
+                if args[1] < 0:
+                    args[1] += 256
+                elif args[1] > 255:
+                    args[1] -= 256
+            #END WHILE
+            #Casting args back to being a tuple
+            args = tuple(args)
+            return func(*args, **kwargs)
+        return wrapper
     #END DEF
 
+    @_checkVals
     def setRed(self, val):
         self.__red = val
-        self.checkVals()
     def getRed(self):
         return self.__red
 
+    @_checkVals
     def setGreen(self, val):
         self.__green = val
-        self.checkVals()
     def getGreen(self):
         return self.__green
 
+    @_checkVals
     def setBlue(self, val):
         self.__blue = val
-        self.checkVals()
     def getBlue(self):
         return self.__blue
 
     def _as_array(self):
+        """Returns the pixel's RGB values in a list format"""
         return [self.__red, self.__green, self.__blue]
     def _as_tuple(self):
+        """Returns the pixel's RGB values in a tuple format"""
         return (self.__red, self.__green, self.__blue)
 
     def cdist(self, **kwargs):
