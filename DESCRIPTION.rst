@@ -13,7 +13,7 @@ Python usage
 The interface is meant to be as simple as possible. To import a class,
   import from SimpleImage. eg.
 
-from SimpleImage.imageClass import rgbImage
+from simpleImage.imageClass import rgbImage
 
 
 Documentation
