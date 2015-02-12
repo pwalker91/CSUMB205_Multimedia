@@ -18,8 +18,8 @@ CLASSES-
 
 # IMPORTS
 import os
-import sys
-import subprocess
+#import sys
+#import subprocess
 from numpy import asarray, uint8
 from tkinter.filedialog import (askdirectory, askopenfilename)
 from PIL import Image
@@ -32,25 +32,54 @@ class rgbPixel(object):
     __red = 0
     __green = 0
     __blue = 0
-    x=0
-    y=0
+    __x=0
+    __y=0
 
-    def __init__(self, r=0,g=0,b=0, x=0,y=0):
+    def __init__(self, *args):
         """
         Object initialization
         ARGS:
             self    this Object
+            (r,g,b) Tuple/List of pixel's color's R,G, and B values
+                or
             r       A pixel value for the Red aspect
             g       A pixel value for the Green aspect
             b       A pixel value for the Blue aspect
+
+            (x,y)   Tuple/List of the pixel's X and Y coordinate
+                or
             x       The X-part of the this pixel's location within the picture
             y       The Y-part of the this pixel's location within the picture
         """
-        self.setRed(r)
-        self.setRed(g)
-        self.setRed(b)
-        self.x = x
-        self.y = y
+        self.setColor(*args)
+        #Determining whether the color was passed in as a list.tuple, or as 3 separate values
+        if not isinstance(args[0], list) and not isinstance(args[0], tuple):
+            if len(args)<4:
+                raise ValueError("You must pass in at least three values to set this pixel's color to.")
+            if not all([isinstance(arg, int) for arg in args[:3]]):
+                raise ValueError("You must pass in at least three integer values to set this pixel's color to.")
+            self.setColor(args[:3])
+            args = args[3:]
+        else:
+            #If setColor() did not raise an error, then we know that there were 3 separate values
+            self.setColor(args[0])
+            args = args[1:]
+        #END IF/ELSE
+        #Checking that the coordinate are viable
+        if not isinstance(args[0], list) and not isinstance(args[0], tuple):
+            if len(args)<2:
+                raise ValueError("You must pass in at least two values to set this pixel's coordinate to.")
+            if not all([isinstance(arg, int) for arg in args[:2]]):
+                raise ValueError("You must pass in at least two integer values to set this pixel's coordinate to.")
+            coord = tuple(args[:2])
+        else:
+            if len(args[0])<2:
+                raise ValueError("You must pass in at least two values to set this pixel's coordinate to.")
+            if not all([isinstance(arg, int) for arg in args[0][:2]]):
+                raise ValueError("You must pass in at least two integer values to set this pixel's coordinate to.")
+            coord = tuple(args[0][:2])
+        #END IF/ELSE
+        self.__x, self.__y = coord
 
     def _checkVals(func):
         """
@@ -67,10 +96,8 @@ class rgbPixel(object):
             #This will make sure that the value is between 0 and 255, by iteratively
             # adding or subtracting 256
             while args[1] > 255 or args[1] < 0:
-                if args[1] < 0:
-                    args[1] += 256
-                elif args[1] > 255:
-                    args[1] -= 256
+                if args[1] < 0:     args[1] += 256
+                elif args[1] > 255: args[1] -= 256
             #END WHILE
             #Casting args back to being a tuple
             args = tuple(args)
@@ -95,6 +122,45 @@ class rgbPixel(object):
         self.__blue = val
     def getBlue(self):
         return self.__blue
+
+    def setColor(self, *args):
+        """
+        Sets this pixel's R,G, and B values to the given values
+        ARGS:
+            (R,G,B)     Tuple/List of three integers
+                or
+            R           Integer value, the red value of the color
+            G           Integer value, the green value of the color
+            B           Integer value, the blue value of the color
+        """
+        if not isinstance(args[0], list) and not isinstance(args[0], tuple):
+            if len(args)<3:
+                raise ValueError("You must pass in at least three values to set this pixel's color to.")
+            color = list(args[:3])
+        else:
+            if len(args[0])<3:
+                raise ValueError("You must pass in at least three values to set this pixel's color to.")
+            color = list(args[0][:3])
+        #END IF/ELSE
+        for i in range(3):
+            if not isinstance(color[i], int):
+                raise ValueError("You must pass in at least three integer values to set this pixel's color to.")
+            while color[i]<0 or color[i]>256:
+                if color[i]<0:      color[i]+=256
+                elif color[i]>255:  color[i]-=256
+            #END WHILE
+        #END FOR
+        color = tuple(color)
+        self.__red, self.__green, self.__blue = color
+        return 0
+    #END DEF
+    def getColor(self):
+        return self._as_tuple()
+
+    def getX(self):
+        return self.__x
+    def getY(self):
+        return self.__y
 
     def _as_array(self):
         """Returns the pixel's RGB values in a list format"""
@@ -142,15 +208,15 @@ class rgbPixel(object):
         """
         if not isinstance(pixel, self.__class__):
             raise ValueError("You must pass an rgbPixel to this function")
-        xDist = pixel.x-self.x
-        yDist = pixel.y-self.y
+        xDist = pixel.getX()-self.__x
+        yDist = pixel.getY()-self.__y
         from math import sqrt
         return sqrt(xDist**2 + yDist**2)
     #END DEF
 
     def __str__(self):
         """Returns a string representation of this object"""
-        return ("Pixel at ({},{}): ".format(self.x, self.y)+
+        return ("Pixel at ({},{}): ".format(self.__x, self.__y)+
                 "RED={}, GREEN={}, BLUE={}".format(self.__red, self.__green, self.__blue))
     #END DEF
 #END CLASS
@@ -248,6 +314,15 @@ class rgbImage(object):
         return self.pixels[y][x]
     #END DEF
 
+    def getAllPixels(self):
+        """Converts this object's 'pixels' attribute into a 1-dimensional array"""
+        allPixels = []
+        for row in self.pixels:
+            for pixel in row:
+                allPixels.append(pixel)
+        return allPixels
+    #END DEF
+
     def save(self, filename="", forceOverwrite=False):
         """
         This will save the current object to a specified location
@@ -298,8 +373,9 @@ class rgbImage(object):
             self.pixels.append([])
             colCount = 0
             for pixel in row:
-                R=pixel[0]; G=pixel[1]; B=pixel[2]
-                self.pixels[-1].append( rgbPixel(r=int(R), g=int(G), b=int(B), x=colCount, y=rowCount) )
+                pixel = tuple([int(val) for val in list(pixel)])
+                coord = (colCount, rowCount)
+                self.pixels[-1].append( rgbPixel(pixel,coord) )
                 colCount+=1
             #END FOR
             rowCount+=1
