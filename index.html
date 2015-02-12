@@ -49,14 +49,13 @@
         <h2>
 <a id="csumbs-cst205---a-simple-image-class" class="anchor" href="#csumbs-cst205---a-simple-image-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>CSUMB's CST205 - A simple Image Class</h2>
 
-<p>This project offers students acces to a simple RGBImage class, which
-is built on the use of the Image module in the PIL package. As PIL is no
-longer updated for Python 3, this package relies on Pillow.
-This package assumes that the user is using at least Python 3.4.2.</p>
+<p>This project offers students access to a simple rgbImage class, which is built on the use of the Image module in the PIL package. As PIL is no longer updated for Python 3, this package relies on Pillow.</p>
+
+<p>This package assumes that the user is using at least Python 3.4.2.</p>
 
 <p><strong>If you have not installed Python 3.4.2, please download it from</strong> <a href="https://www.python.org/downloads/">python.org</a>.</p>
 
-<p>If you are using Windows, make sure to check the option to <strong>add the python.exe to your path</strong>. PIP will not work otherwise.</p>
+<p>If you are using Windows, make sure to check the option to <em>add the python.exe to your path</em>. PIP will not work otherwise.</p>
 
 <hr>
 
@@ -117,9 +116,9 @@ This package assumes that the user is using at least Python 3.4.2.</p>
           pixel.setBlue(0)
 </code></pre>
 
-<p>If a pixel's attribute is set to anything above 255, the object will automatically wrap the value around. For example, setting a pixel's red value to 300 will actually set it to 300-256, or 44.</p>
+<p>If a pixel's attribute is set to anything above 255, the object will automatically wrap the value around. For example, setting a pixel's red value to 300 will actually set it to <code>300-256</code>, or 44.</p>
 
-<pre><code> myImage.pixels[0][0].setRed(300)  ===&gt;  myImage.pixels[0] red is now 44
+<pre><code> myImage.pixels[0][0].setRed(300)  ===&gt;  myImage.pixels[0][0] red is now 44
 </code></pre>
 
 <p>For more information on the <code>rgbImage</code> class, type <code>help('SimpleImage.ImageClass')</code> in the Python interpreter</p>
