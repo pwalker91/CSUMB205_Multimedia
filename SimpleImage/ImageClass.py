@@ -19,7 +19,7 @@ CLASSES-
 # IMPORTS
 from platform import system
 if system() == "Windows":
-    from os import ntpath as path
+    import ntpath as path
 else:
     from os import path
 #import sys
@@ -307,19 +307,22 @@ class rgbImage(object):
                                             multiple = False)
             else:
                 self.inputFilename = path.abspath(filename)
+                acceptedExt = ["jpg","jpeg","png","gif"]
                 if not path.isfile(self.inputFilename) or \
-                        self.inputFilename.split(".")[-1].lower() not in ["jpg","jpeg","png","gif"]:
-                    raise ValueError("You must pass in a legitimate picture file")
+                        self.inputFilename.split(".")[-1].lower() not in acceptedExt:
+                    raise ValueError("You must pass in a legitimate picture file. "+
+                                    "Use one of the following options:"+str(acceptedExt))
             #END IF/ELSE
             if not saveTo:
-                self.outputFilename = (self.inputFilename.rsplit(".",1)[0] + "_v2." +
-                                        self.inputFilename.rsplit(".",1)[1])
+                dirname = path.dirname(self.inputFilename)
+                filename = path.basename(self.inputFilename)
+                filename = filename.split(".")[0]+"_v2."+filename.split(".")[1]
+                self.outputFilename = path.join(dirname, filename)
             else:
                 self.outputFilename = path.abspath(saveTo)
             #END IF/ELSE
             if path.isfile(self.outputFilename):
-                shortOutput = self.outputFilename.split("/")[-1].split("\\")[-1]
-                print("{} will be overwritten if this file is saved. ".format(shortOutput)+
+                print("{} will be overwritten if this file is saved. ".format(path.basename(self.outputFilename))+
                         "Consider saving to another location."
                     )
             #END IF
@@ -452,7 +455,7 @@ class rgbImage(object):
 
     def __str__(self):
         """Returns a string representation of this object"""
-        shortInput = self.inputFilename.split("/")[-1].split("\\")[-1]
+        shortInput = path.basename(self.inputFilename)
         return ("RGB Image named {}\nSize is {}x{} pixels".format(shortInput, self.width, self.height)
                 )
     #END DEF
