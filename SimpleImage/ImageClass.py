@@ -17,7 +17,11 @@ CLASSES-
 
 
 # IMPORTS
-import os
+from platform import system
+if system() == "Windows":
+    from os import ntpath as path
+else:
+    from os import path
 #import sys
 #import subprocess
 from numpy import asarray, uint8
@@ -29,11 +33,18 @@ from PIL import Image
 
 #CLASS
 class rgbPixel(object):
+    """
+    ---------------------
+    Class Attributes
+    """
     __red = 0
     __green = 0
     __blue = 0
     __x=0
     __y=0
+    """
+    ---------------------
+    """
 
     def __init__(self, *args):
         """
@@ -51,48 +62,28 @@ class rgbPixel(object):
             x       The X-part of the this pixel's location within the picture
             y       The Y-part of the this pixel's location within the picture
         """
-        self.setColor(*args)
-        #Determining whether the color was passed in as a list.tuple, or as 3 separate values
-        if not isinstance(args[0], list) and not isinstance(args[0], tuple):
-            if len(args)<4:
-                raise ValueError("You must pass in at least three values to set this pixel's color to.")
-            if not all([isinstance(arg, int) for arg in args[:3]]):
-                raise ValueError("You must pass in at least three integer values to set this pixel's color to.")
-            self.setColor(args[:3])
-            args = args[3:]
-        else:
-            #If setColor() did not raise an error, then we know that there were 3 separate values
-            self.setColor(args[0])
+        #The return of setColor() is True if args[0] is a list or tuple
+        if self.setColor(*args):
             args = args[1:]
-        #END IF/ELSE
-        #Checking that the coordinate are viable
-        if not isinstance(args[0], list) and not isinstance(args[0], tuple):
-            if len(args)<2:
-                raise ValueError("You must pass in at least two values to set this pixel's coordinate to.")
-            if not all([isinstance(arg, int) for arg in args[:2]]):
-                raise ValueError("You must pass in at least two integer values to set this pixel's coordinate to.")
-            coord = tuple(args[:2])
         else:
-            if len(args[0])<2:
-                raise ValueError("You must pass in at least two values to set this pixel's coordinate to.")
-            if not all([isinstance(arg, int) for arg in args[0][:2]]):
-                raise ValueError("You must pass in at least two integer values to set this pixel's coordinate to.")
-            coord = tuple(args[0][:2])
+            args = args[3:]
         #END IF/ELSE
-        self.__x, self.__y = coord
+        self.__setCoord(*args)
+    #END DEF
 
-    def _checkVals(func):
+    def __checkVal(func):
         """
-        A decorator that will make sure that the arguments passed are viable.
+        A decorator that will make sure that the color arguments passed are viable.
         The arguments we are expected are "self", and an integer value between
          0 and 255.
         """
         def wrapper(*args, **kwargs):
-            if not isinstance(args[1], int):
-                raise ValueError("This function requires two positional arguments: ARG #2 must be an integer value.")
+            if not isinstance(args[1], (int,float)):
+                raise ValueError("You must pass in a number value. Was passed {}".format(repr(args[1])))
             #Casting args to a list so that we can modify the values (args was originally
             # a tuple, which is immutable)
             args = list(args)
+            args[1] = int(args[1])
             #This will make sure that the value is between 0 and 255, by iteratively
             # adding or subtracting 256
             while args[1] > 255 or args[1] < 0:
@@ -104,24 +95,56 @@ class rgbPixel(object):
             return func(*args, **kwargs)
         return wrapper
     #END DEF
+    def __checkCoord(func):
+        """
+        A decorator that will make sure that the coordinate arguments passed are viable.
+        The arguments we are expected are "self", and an integer value greater than 0.
+        """
+        def wrapper(*args, **kwargs):
+            if not isinstance(args[1], (int,float)):
+                raise ValueError("You must pass in a number value. Was passed {}".format(repr(args[1])))
+            #Checking for negative coordinate
+            if args[1]<0:
+                raise ValueError("You must pass in a POSITIVE number value. "+
+                                 "Was passed {}".format(repr(args[1])))
+            #Casting args to a list so that we can modify the values (args was originally
+            # a tuple, which is immutable)
+            args = list(args)
+            args[1] = float(args[1])
+            #Casting args back to being a tuple
+            args = tuple(args)
+            return func(*args, **kwargs)
+        return wrapper
+    #END DEF
 
-    @_checkVals
+    #Color setting functions
+    @__checkVal
     def setRed(self, val):
         self.__red = val
     def getRed(self):
         return self.__red
-
-    @_checkVals
+    @__checkVal
     def setGreen(self, val):
         self.__green = val
     def getGreen(self):
         return self.__green
-
-    @_checkVals
+    @__checkVal
     def setBlue(self, val):
         self.__blue = val
     def getBlue(self):
         return self.__blue
+
+    #Coordinate setting functions
+    @__checkCoord
+    def __setX(self, coord):
+        self.__x = coord
+    def getX(self):
+        return self.__x
+    @__checkCoord
+    def __setY(self, coord):
+        self.__y = coord
+    def getY(self):
+        return self.__y
 
     def setColor(self, *args):
         """
@@ -133,41 +156,67 @@ class rgbPixel(object):
             G           Integer value, the green value of the color
             B           Integer value, the blue value of the color
         """
-        if not isinstance(args[0], list) and not isinstance(args[0], tuple):
-            if len(args)<3:
-                raise ValueError("You must pass in at least three values to set this pixel's color to.")
+        if len(args) == 0:
+            raise ValueError("You must pass in 2 NUMBER values (as a tuple or separately). "+
+                                "You passed in {}".format(len(coord)))
+        if not isinstance(args[0], (list,tuple)):
             color = list(args[:3])
+            _usingList = False
         else:
-            if len(args[0])<3:
-                raise ValueError("You must pass in at least three values to set this pixel's color to.")
             color = list(args[0][:3])
-        #END IF/ELSE
-        for i in range(3):
-            if not isinstance(color[i], int):
-                raise ValueError("You must pass in at least three integer values to set this pixel's color to.")
-            while color[i]<0 or color[i]>256:
-                if color[i]<0:      color[i]+=256
-                elif color[i]>255:  color[i]-=256
-            #END WHILE
-        #END FOR
-        color = tuple(color)
-        self.__red, self.__green, self.__blue = color
-        return 0
+            _usingList = True
+        if len(color)!=3:
+            raise ValueError("You must pass in 3 NUMBER values (as a tuple or separately). "+
+                                "You passed in {}".format(len(color)))
+        self.setRed(color[0])
+        self.setGreen(color[1])
+        self.setBlue(color[2])
+        return _usingList
     #END DEF
     def getColor(self):
-        return self._as_tuple()
+        return self._color_as_tuple()
 
-    def getX(self):
-        return self.__x
-    def getY(self):
-        return self.__y
+    def __setCoord(self, *args):
+        """
+        Sets this pixel's X and Y coordinate to the given values
+        ARGS:
+            (x,y)   Tuple/List of the pixel's X and Y coordinate
+                or
+            x       The X-part of the this pixel's location within the picture
+            y       The Y-part of the this pixel's location within the picture
+        """
+        if len(args) == 0:
+            raise ValueError("You must pass in 2 NUMBER values (as a tuple or separately). "+
+                                "You passed in {}".format(len(coord)))
+        if not isinstance(args[0], (list,tuple)):
+            coord = list(args[:2])
+            _usingList = False
+        else:
+            coord = list(args[0][:2])
+            _usingList = True
+        if len(coord)!=2:
+            raise ValueError("You must pass in 2 NUMBER values (as a tuple or separately). "+
+                                "You passed in {}".format(len(coord)))
+        self.__setX(coord[0])
+        self.__setY(coord[1])
+        return _usingList
+    #END DEF
+    def getCoord(self):
+        return self._coord_as_tuple()
 
-    def _as_array(self):
+    def _color_as_array(self):
         """Returns the pixel's RGB values in a list format"""
         return [self.__red, self.__green, self.__blue]
-    def _as_tuple(self):
+    def _color_as_tuple(self):
         """Returns the pixel's RGB values in a tuple format"""
         return (self.__red, self.__green, self.__blue)
+    def _coord_as_array(self):
+        """Returns the pixel's RGB values in a list format"""
+        return [self.__x, self.__y]
+    def _coord_as_tuple(self):
+        """Returns the pixel's RGB values in a tuple format"""
+        return (self.__x, self.__y)
+
 
     def cdist(self, **kwargs):
         """
@@ -184,8 +233,7 @@ class rgbPixel(object):
         if not any( [elem in kwargs for elem in ["color", "pixel"]] ):
             raise KeyError("You must pass either a color or pixel through the keywords 'color' or 'pixel'")
         if "color" in kwargs:
-            if not (isinstance(kwargs['color'], tuple) or isinstance(kwargs['color'], list)) \
-                    and len(kwargs['color']) != 3:
+            if not isinstance(kwargs['color'], (tuple,list)) and len(kwargs['color']) != 3:
                 raise ValueError("You must give an RGB value as a tuple (r,g,b) to 'color'")
         elif "pixel" in kwargs:
             if (self.__class__ != kwargs['pixel'].__class__):
@@ -194,7 +242,7 @@ class rgbPixel(object):
         if "color" in kwargs:
             givenR, givenG, givenB = kwargs['color']
         elif "pixel" in kwargs:
-            givenR, givenG, givenB = kwargs['pixel']._as_tuple()
+            givenR, givenG, givenB = kwargs['pixel']._color_as_tuple()
         rDist = givenR-self.__red
         gDist = givenG-self.__green
         bDist = givenB-self.__blue
@@ -208,8 +256,8 @@ class rgbPixel(object):
         """
         if not isinstance(pixel, self.__class__):
             raise ValueError("You must pass an rgbPixel to this function")
-        xDist = pixel.getX()-self.__x
-        yDist = pixel.getY()-self.__y
+        xDist = pixel.getX()-self.getX()
+        yDist = pixel.getY()-self.getY()
         from math import sqrt
         return sqrt(xDist**2 + yDist**2)
     #END DEF
@@ -225,8 +273,10 @@ class rgbPixel(object):
 
 #CLASS
 class rgbImage(object):
-    # ---------------------
-    # Class Attributes
+    """
+    ---------------------
+    Class Attributes
+    """
     inputFilename = ""
     outputFilename = ""
 
@@ -235,7 +285,9 @@ class rgbImage(object):
 
     height = 0
     width = 0
-    # ---------------------
+    """
+    ---------------------
+    """
 
     def __init__(self, filename="", saveTo="", blank=False, width=100, height=100):
         """
@@ -250,12 +302,12 @@ class rgbImage(object):
         """
         if not blank:
             if not filename:
-                self.inputFilename = askopenfilename( initialdir = os.path.expanduser("~"),
+                self.inputFilename = askopenfilename( initialdir = path.expanduser("~"),
                                             title = "Select the FILE containing the raw data",
                                             multiple = False)
             else:
-                self.inputFilename = os.path.abspath(filename)
-                if not os.path.isfile(self.inputFilename) or \
+                self.inputFilename = path.abspath(filename)
+                if not path.isfile(self.inputFilename) or \
                         self.inputFilename.split(".")[-1].lower() not in ["jpg","jpeg","png","gif"]:
                     raise ValueError("You must pass in a legitimate picture file")
             #END IF/ELSE
@@ -263,9 +315,9 @@ class rgbImage(object):
                 self.outputFilename = (self.inputFilename.rsplit(".",1)[0] + "_v2." +
                                         self.inputFilename.rsplit(".",1)[1])
             else:
-                self.outputFilename = os.path.abspath(saveTo)
+                self.outputFilename = path.abspath(saveTo)
             #END IF/ELSE
-            if os.path.isfile(self.outputFilename):
+            if path.isfile(self.outputFilename):
                 shortOutput = self.outputFilename.split("/")[-1].split("\\")[-1]
                 print("{} will be overwritten if this file is saved. ".format(shortOutput)+
                         "Consider saving to another location."
@@ -339,8 +391,8 @@ class rgbImage(object):
              location in filename, or at self.outputFilename
         """
         if filename:
-            self.outputFilename = os.path.abspath(filename)
-        if os.path.isfile(self.outputFilename) and not forceOverwrite:
+            self.outputFilename = path.abspath(filename)
+        if path.isfile(self.outputFilename) and not forceOverwrite:
             overwrite = input( "{} will be overwritten. Continue? (y/n) ".format(self.outputFilename) )
             if overwrite.lower() != "y":
                 return
