@@ -71,6 +71,9 @@ class rgbPixel(object):
         self.__setCoord(*args)
     #END DEF
 
+
+# GETTERS AND SETTERS ----------------------------------------------------------
+
     def __checkVal(func):
         """
         A decorator that will make sure that the color arguments passed are viable.
@@ -204,6 +207,9 @@ class rgbPixel(object):
     def getCoord(self):
         return self._coord_as_tuple()
 
+
+# CONVERTERS -------------------------------------------------------------------
+
     def _color_as_array(self):
         """Returns the pixel's RGB values in a list format"""
         return [self.__red, self.__green, self.__blue]
@@ -217,6 +223,8 @@ class rgbPixel(object):
         """Returns the pixel's RGB values in a tuple format"""
         return (self.__x, self.__y)
 
+
+# FUN PIXEL MATH FUNCTIONS -----------------------------------------------------
 
     def cdist(self, **kwargs):
         """
@@ -262,11 +270,54 @@ class rgbPixel(object):
         return sqrt(xDist**2 + yDist**2)
     #END DEF
 
+    def _avgValue(self):
+        return int((self.__red + self.__green + self.__blue)/3)
+    #END DEF
+
+
+# STRING FUNCTIONS -------------------------------------------------------------
+
     def __str__(self):
         """Returns a string representation of this object"""
         return ("Pixel at ({},{}): ".format(self.__x, self.__y)+
                 "RED={}, GREEN={}, BLUE={}".format(self.__red, self.__green, self.__blue))
     #END DEF
+
+
+# COMPARATORS ------------------------------------------------------------------
+
+    def __sameObject(func):
+        def wrapper(*args, **kwargs):
+            if not isinstance(args[1], args[0].__class__):
+                raise TypeError("You must compare objects of the same type. Cannot compare "+
+                                "{0} and {1}".format(args[0].__class__, args[1].__class__))
+            return func(*args, **kwargs)
+        return wrapper
+    #END DEF
+    @__sameObject
+    def __lt__(self, other):
+        if self._avgValue() < other._avgValue():
+            return True
+        return False
+    #END DEF
+    @__sameObject
+    def __eq__(self, other):
+        if self._avgValue() == other._avgValue():
+            return True
+        return False
+    #END DEF
+    @__sameObject
+    def __gt__(self, other):
+        return not self.__eq__(other) and not self.__lt__(other)
+    @__sameObject
+    def __ne__(self, other):
+        return not self.__eq__(other)
+    @__sameObject
+    def __ge__(self, other):
+        return self.__eq__(other) or self.__gt__(other)
+    @__sameObject
+    def __le__(self, other):
+        return self.__eq__(other) or self.__le__(other)
 #END CLASS
 
 
