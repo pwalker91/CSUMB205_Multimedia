@@ -64,14 +64,14 @@
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>INSTALLATION</h2>
 
-<p>You can download this package through the use of PIP. From an administrator command prompt, run...</p>
+<p>You can download this package through the use of PIP, a built-in package installer that comes with Python 3.4.2. Go to the start menu and open an administrator command prompt. Then run...</p>
 
-<pre><code> pip install CSUMB205-Image
+<pre><code> C:\&gt; pip install CSUMB205-Image
 </code></pre>
 
 <p>On Mac OSX, you will have multiple versions of Python. You <em>still</em> need to install Python 3.4.2, but you will open Terminal, and type the command...</p>
 
-<pre><code> pip3 install CSUMB205-Image
+<pre><code> $ pip3 install CSUMB205-Image
 </code></pre>
 
 <hr>
@@ -79,51 +79,64 @@
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>USAGE:</h2>
 
-<p>The interface is meant to be as simple as possible. This is how you import the necessary class.</p>
+<p>The interface is designed to let you modify pixel values of an image. To start, open the Integrated Development Environment (IDE) that came with your installation of Python, <strong>IDLE</strong>.</p>
 
-<pre><code> from simpleImage.ImageClass import rgbImage
+<p>Once you have started the application, you will be greeted with the Python Shell. Each line will start with <code>&gt;&gt;&gt;</code>, which is the Python command prompt (similar to <code>$</code> on Mac and <code>C:\&gt;</code> on Windows). To make sure that you have correctly installed the package through use of PIP, type this command... (again, do not copy in the <code>&gt;&gt;&gt;</code>)</p>
+
+<pre><code> &gt;&gt;&gt; from simpleImage.ImageClass import rgbImage
 </code></pre>
+
+<p>Now you can start creating Python scripts. You can also keep playing around with the package in the Python Shell, which is what the rest of the directions assume. If you wish to save all of these commands in a Python file (extension is .py) that can be executed in it's entirety, go to File, then New File, and start writing these commands in the new window.</p>
 
 <p>This is how you actually create an Image object.</p>
 
-<pre><code> myImage = rgbImage("/absolute/path/to/your/image")
+<pre><code> &gt;&gt;&gt; myImage = rgbImage("/absolute/path/to/your/image")
 </code></pre>
 
 <p>NOTE: If you leave the constructor empty, tkinter will open a file dialog, asking you to choose a file.</p>
 
-<pre><code> myImage = rgbImage("")  ===&gt;  tkinter filedialog GUI
+<pre><code> &gt;&gt;&gt; myImage = rgbImage("")  ===&gt;  tkinter filedialog GUI
 </code></pre>
 
 <p>Now that we have an image imported, what values do we have? We can get the image's size, or number of pixels.</p>
 
-<pre><code> numOfPixels = myImage.size
+<pre><code> &gt;&gt;&gt; numOfPixels = myImage.size
 </code></pre>
 
 <p>We can also get the width and heigh individually.</p>
 
-<pre><code> myWidth = myImage.width
- myHeight = myImage.height
+<pre><code> &gt;&gt;&gt; myWidth = myImage.width
+ &gt;&gt;&gt; myHeight = myImage.height
 </code></pre>
 
-<p>The most important part of our image, however, is the list of pixels. We can get individual pixels by using two array references, where the first value is the row of picture (starting from 0), and the second is the column of the picture (starting from 0).</p>
+<p>The most important part of our image, however, is the list of pixels. There are two ways to get individual pixels. We can get individual pixels by using two array references, where the first value is the row of picture (starting from 0), and the second is the column of the picture (starting from 0).</p>
 
-<pre><code> a_pixel = myImage.pixels[0][0]
+<pre><code> &gt;&gt;&gt; a_pixel = myImage.pixels[0][0]
 </code></pre>
+
+<p>We can also use one of the object's functions, getPixel(), which takes two integers. The two possible ways to get a pixel, given a coordinate, are shown below...</p>
+
+<pre><code> &gt;&gt;&gt; a_pixel = myImage.getPixel(1, 6)
+           or
+ &gt;&gt;&gt; a_pixel = myImage.getPixel( (4,9) )
+</code></pre>
+
+<p>The difference is that the first one passes each coordinate to the function individually, while the second passes them as a tuple, which an immutable array that can be created in Python with the <code>()</code> characters around a list of values.</p>
 
 <p>Each element of the images list "pixels" is an <code>rgbPixel</code> object. These objects have a "red", "green", and "blue" attribute, which are integers. We can then loop through every pixels and set it's blue or red values.</p>
 
-<pre><code>  for row in myImage.pixels:
-      for pixel in row:
-          pixel.setRed(255)
-          pixel.setBlue(0)
+<pre><code>  &gt;&gt;&gt; for row in myImage.pixels:
+  ...    for pixel in row:
+  ...        pixel.setRed(255)
+  ...        pixel.setBlue(0)
 </code></pre>
 
 <p>If a pixel's attribute is set to anything above 255, the object will automatically wrap the value around. For example, setting a pixel's red value to 300 will actually set it to <code>300-256</code>, or 44.</p>
 
-<pre><code> myImage.pixels[0][0].setRed(300)  ===&gt;  myImage.pixels[0][0] red is now 44
+<pre><code>  &gt;&gt;&gt; myImage.getPixel(0,0).setRed(300)  ===&gt;  the pixel in myImage at (0,0) red is now 44
 </code></pre>
 
-<p>For more information on the <code>rgbImage</code> class, type <code>help('simpleImage.ImageClass')</code> in the Python interpreter, or check out <a href="./moduleHelp.txt">this text file</a> for a printout of the previous command.</p>
+<p>For more detailed information on the <code>rgbImage</code> class and the <code>rgbPixel</code> class, type <code>help('simpleImage.ImageClass')</code> in the Python Shell, or check out <a href="./moduleHelp.txt">this text file</a> for a printout of the previous command.</p>
 
 <hr>
 
