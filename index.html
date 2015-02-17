@@ -128,7 +128,9 @@
 
 <p>The difference is that the first one passes each coordinate to the function individually, while the second passes them as a tuple, which an immutable array that can be created in Python with the <code>()</code> characters around a list of values. This was mainly implemented in case it made more sense to pass something that looks like a coordinate pair.</p>
 
-<p>We can also get every pixel in the picture in a sequence using the <code>getAllPixels()</code> function. This will return an array containing every pixels in the picture, which could then be iterated through. Each pixel is represented by an <code>rgbPixel</code> object. These objects have a "red", "green", and "blue" attribute, which are integers. We can then loop through every pixels and set it's green, blue or red values as we see fit.</p>
+<p>We can also get every pixel in the picture in a sequence using the <code>getAllPixels()</code> function. This will return an array containing every pixels in the picture, which could then be iterated through.</p>
+
+<p>Each pixel is represented by an <code>rgbPixel</code> object. These objects have a "red", "green", and "blue" attribute, which are integers. We can then loop through every pixels and set it's green, blue or red values as we see fit.</p>
 
 <pre><code>  &gt;&gt;&gt; for row in myImage.getAllPixels:
   ...    for pixel in row:
