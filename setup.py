@@ -59,8 +59,7 @@ setup(
 
         # Specify the operating systems that this module should work on
         'Operating System :: MacOS',
-        'Operating System :: Microsoft :: Windows :: Windows 7',
-        'Operating System :: Microsoft :: Windows :: Windows 8'
+        'Operating System :: Microsoft :: Windows :: Windows 7'
     ],
 
     # What does your project relate to?
