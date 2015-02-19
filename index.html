@@ -21,7 +21,7 @@
   </head>
 
   <body>
-    <a id="forkme_banner" href="https://github.com/pwalker91/CSUMB205_Image">View on GitHub</a>
+    <a id="forkme_banner" href="https://github.com/pwalker91/CSUMB205_Multimedia">View on GitHub</a>
     <div class="shell">
 
       <header>
@@ -37,7 +37,7 @@
 
       <section id="downloads">
         <span class="inner">
-          <a href="https://github.com/pwalker91/CSUMB205_Image/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/pwalker91/CSUMB205_Image/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+          <a href="https://github.com/pwalker91/CSUMB205_Multimedia/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/pwalker91/CSUMB205_Multimedia/tarball/master" class="tgz"><em>download</em> .TGZ</a>
         </span>
       </section>
 
@@ -69,12 +69,12 @@
 
 <p>You can download this package through the use of PIP, a built-in package installer that comes with Python 3.4.2. Go to the start menu and open an administrator command prompt. Then run...</p>
 
-<pre><code> C:\&gt; pip install CSUMB205-Image
+<pre><code> pip install csumb205-multimedia
 </code></pre>
 
 <p>On Mac OSX, you will have multiple versions of Python. You <em>still</em> need to install Python 3.4.2, but you will open Terminal, and type the command...</p>
 
-<pre><code> $ pip3 install CSUMB205-Image
+<pre><code> pip3 install csumb205-multimedia
 </code></pre>
 
 <hr>
@@ -86,7 +86,7 @@
 
 <p>Once you have started the application, you will be greeted with the Python Shell. Each line will start with <code>&gt;&gt;&gt;</code>, which is the Python command prompt (similar to <code>$</code> on Mac and <code>C:\&gt;</code> on Windows). To make sure that you have correctly installed the package through use of PIP, type this command... (again, do not copy in the <code>&gt;&gt;&gt;</code>)</p>
 
-<pre><code> &gt;&gt;&gt; from simpleImage.ImageClass import rgbImage
+<pre><code> &gt;&gt;&gt; from imageClass import rgbImage
 </code></pre>
 
 <p>Now you can start creating Python scripts. You can also keep playing around with the package in the Python Shell, which is what the rest of the directions assume. If you wish to save all of these commands in a Python file (extension is .py) that can be executed in it's entirety, go to File, then New File, and start writing these commands in the new window.</p>
@@ -101,18 +101,13 @@
 <pre><code> &gt;&gt;&gt; myImage = rgbImage("")  ===&gt;  tkinter filedialog GUI
 </code></pre>
 
-<p>Now that we have an image imported, what values do we have? We can get the image's size, or number of pixels.</p>
-
-<pre><code> &gt;&gt;&gt; numOfPixels = myImage.size
-</code></pre>
-
-<p>We can also get the width and heigh individually.</p>
+<p>Now that we have our image imported, and stored in the object myImage, we can get the width and heigh individually...</p>
 
 <pre><code> &gt;&gt;&gt; myWidth = myImage.width
  &gt;&gt;&gt; myHeight = myImage.height
 </code></pre>
 
-<p>The most important part of our image, however, is the list of pixels. There are two ways to get individual pixels. We can get individual pixels by using two array references, where the first value is the row the pixel is in, or Y-coordinate (starting from 0), and the second is the column the pixel is in, or X-coordinate (starting from 0).</p>
+<p>...and so much more. The most important part of our image, however, is the list of pixels. There are two ways to get individual pixels. We can get individual pixels by using two array references, where the first value is the row the pixel is in, or Y-coordinate (starting from 0), and the second is the column the pixel is in, or X-coordinate (starting from 0).</p>
 
 <pre><code> &gt;&gt;&gt; a_pixel = myImage.pixels[0][0]
 </code></pre>
@@ -150,13 +145,13 @@
 <h3>
 <a id="pypi" class="anchor" href="#pypi" aria-hidden="true"><span class="octicon octicon-link"></span></a>PyPI:</h3>
 
-<p>The Python Package Index page for this package can be <a href="https://pypi.python.org/pypi/CSUMB205-Image">found here</a>.</p>
+<p>The Python Package Index page for this package can be <a href="https://pypi.python.org/pypi/csumb205-multimedia">found here</a>.</p>
       </section>
 
       <footer>
         <span class="ribbon-outer">
           <span class="ribbon-inner">
-            <p>this project by <a href="https://github.com/pwalker91">pwalker91</a> can be found on <a href="https://github.com/pwalker91/CSUMB205_Image">GitHub</a></p>
+            <p>this project by <a href="https://github.com/pwalker91">pwalker91</a> can be found on <a href="https://github.com/pwalker91/CSUMB205_Multimedia">GitHub</a></p>
           </span>
           <span class="left-tail"></span>
           <span class="right-tail"></span>
