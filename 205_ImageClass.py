@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 """
 -------------------------------------------------------------------------------
-CST205_PIL.PY
+205_IMAGE CLASS.PY
 
 AUTHOR(S):     Peter Walker    pwalker@csumb.edu
 
@@ -306,16 +306,12 @@ class rgbPixel(object):
             return True
         return False
     #END DEF
-    @__sameObject
     def __gt__(self, other):
         return not self.__eq__(other) and not self.__lt__(other)
-    @__sameObject
     def __ne__(self, other):
         return not self.__eq__(other)
-    @__sameObject
     def __ge__(self, other):
         return self.__eq__(other) or self.__gt__(other)
-    @__sameObject
     def __le__(self, other):
         return self.__eq__(other) or self.__le__(other)
 #END CLASS
@@ -462,7 +458,6 @@ class rgbImage(object):
         """Shows the image the user is currently working on"""
         img_to_array = asarray(self.__as_array())
         Image.fromarray(img_to_array).show()
-        del img_to_array
     #END DEF
 
     def reset(self):
@@ -497,7 +492,7 @@ class rgbImage(object):
         for row in self.pixels:
             tempArray.append([])
             for pixel in row:
-                init_arr = pixel._as_array()
+                init_arr = pixel._color_as_array()
                 append_arr = [uint8(rgbVal) for rgbVal in init_arr]
                 tempArray[-1].append(append_arr)
         #END FOR

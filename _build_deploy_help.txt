@@ -4,6 +4,6 @@ py setup.py develop --uninstall
 
  #When you want it to be uploaded to PyPI
 py setup.py sdist
-twine upload dist/CSUMB205_Image-0.5.2.tar.gz
+twine upload dist/CSUMB205_Multimedia-0.5.2.tar.gz
 
-pip3 install --upgrade CSUMB205_Image
+pip3 install --upgrade csumb205-multimedia

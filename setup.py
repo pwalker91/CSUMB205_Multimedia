@@ -9,12 +9,12 @@ with open(path.join(here, 'DESCRIPTION.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='csumb205-multimedia',
+    name='csumb205_multimedia',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.8.4',
+    version='0.8.5',
 
     description='A easier-to-use, academic wrapper class some multimedia modules',
     long_description=long_description,
@@ -59,11 +59,13 @@ setup(
     ],
 
     # What does your project relate to?
-    keywords='image multimedia manipulation education csumb',
+    keywords='image multimedia manipulation education csumb 205',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=['simpleMedia'],
+    py_modules=['205_AudioClass',
+                '205_ImageClass',
+                '205_VideoClass'],
 
     # List run-time dependencies here.  These will be installed by pip when your
     # project is installed. For an analysis of "install_requires" vs pip's
