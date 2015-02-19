@@ -9,18 +9,18 @@ with open(path.join(here, 'DESCRIPTION.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='CSUMB205_Image',
+    name='csumb205-multimedia',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
     version='0.8.4',
 
-    description='A easier-to-use, academic wrapper class for the PIL module',
+    description='A easier-to-use, academic wrapper class some multimedia modules',
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/pwalker91/CSUMB205_Image',
+    url='https://github.com/pwalker91/CSUMB205_Multimedia',
 
     # Author details
     author='Peter Walker',
@@ -35,7 +35,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
 
         # Indicate who your project is intended for
         'Intended Audience :: Education',
@@ -63,7 +63,7 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=['simpleImage'],
+    packages=['simpleMedia'],
 
     # List run-time dependencies here.  These will be installed by pip when your
     # project is installed. For an analysis of "install_requires" vs pip's
