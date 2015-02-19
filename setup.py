@@ -63,13 +63,13 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    py_modules=['205_AudioClass',
-                '205_ImageClass',
-                '205_VideoClass'],
+    py_modules=['simpleAudio',
+                'simpleImage',
+                'simpleVideo'],
 
     # List run-time dependencies here.  These will be installed by pip when your
     # project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['Pillow', 'numpy'],
+    install_requires=['Pillow', 'numpy'], #'moviepy', ...],
 )

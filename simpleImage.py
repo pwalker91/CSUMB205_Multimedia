@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 """
 -------------------------------------------------------------------------------
-205_IMAGE CLASS.PY
+SIMPLE IMAGE.PY
 
 AUTHOR(S):     Peter Walker    pwalker@csumb.edu
 
@@ -72,7 +72,7 @@ class rgbPixel(object):
     #END DEF
 
 
-# GETTERS AND SETTERS ----------------------------------------------------------
+  # GETTERS AND SETTERS ----------------------------------------------------------
 
     def __checkVal(func):
         """
@@ -208,7 +208,7 @@ class rgbPixel(object):
         return self._coord_as_tuple()
 
 
-# CONVERTERS -------------------------------------------------------------------
+  # CONVERTERS -------------------------------------------------------------------
 
     def _color_as_array(self):
         """Returns the pixel's RGB values in a list format"""
@@ -224,7 +224,7 @@ class rgbPixel(object):
         return (self.__x, self.__y)
 
 
-# FUN PIXEL MATH FUNCTIONS -----------------------------------------------------
+  # FUN PIXEL MATH FUNCTIONS -----------------------------------------------------
 
     def cdist(self, **kwargs):
         """
@@ -275,7 +275,7 @@ class rgbPixel(object):
     #END DEF
 
 
-# STRING FUNCTIONS -------------------------------------------------------------
+  # STRING FUNCTIONS -------------------------------------------------------------
 
     def __str__(self):
         """Returns a string representation of this object"""
@@ -284,7 +284,7 @@ class rgbPixel(object):
     #END DEF
 
 
-# COMPARATORS ------------------------------------------------------------------
+  # COMPARATORS ------------------------------------------------------------------
 
     def __sameObject(func):
         def wrapper(*args, **kwargs):
@@ -328,6 +328,7 @@ class rgbImage(object):
     outputFilename = ""
 
     __myImage = None
+    __blank = False
     pixels = []
 
     height = 0
@@ -347,13 +348,16 @@ class rgbImage(object):
                 width   Integer, the width of the blank image
                 height  Integer, the height of the blank image
         """
-        if not blank:
+        self.__blank = blank
+        if not self.__blank:
             if not filename:
                 self.inputFilename = askopenfilename( initialdir = path.expanduser("~"),
                                             title = "Select the FILE containing the raw data",
                                             multiple = False)
+                if not self.inputFilename:
+                    raise ValueError("You must choose a file for this class to work.")
             else:
-                self.inputFilename = path.abspath(filename)
+                self.inputFilename = path.abspath(filename).replace("\\","").strip()
                 acceptedExt = ["jpg","jpeg","png","gif"]
                 if not path.isfile(self.inputFilename) or \
                         self.inputFilename.split(".")[-1].lower() not in acceptedExt:
@@ -373,16 +377,13 @@ class rgbImage(object):
                         "Consider saving to another location."
                     )
             #END IF
-            self.__myImage = Image.open(self.inputFilename)
         else:
-            self.__myImage = Image.new("RGB", (width, height))
+            self.width, self.height = width, height
         #END IF/ELSE
 
+        print("Importing image {}".format(self.inputFilename))
         #Calls self.reset(), as the reset function does what we want to do initially
         self.reset()
-
-        #Setting some other useful variables for users
-        self.width, self.height = self.__myImage.size
     #END DEF
 
     def getPixel(self, *args):
@@ -462,6 +463,12 @@ class rgbImage(object):
 
     def reset(self):
         """Resets this object to the original image"""
+        #We need to open the file to get the data from it. If self.__blank is not
+        # true, then we need to create a new image.
+        if not self.__blank:
+            self.__myImage = Image.open(self.inputFilename)
+        else:
+            self.__myImage = Image.new("RGB", (self.width, self.height))
         #The results of calling asarray() on the now created Image object is a 4-dimensional
         # array. The original array is made up of rows, each row is made up of pixels, and
         # each pixel is a set of 3 values (R,G,B of the pixel)
@@ -481,6 +488,12 @@ class rgbImage(object):
             #END FOR
             rowCount+=1
         #END FOR
+
+        #Setting some other useful variables for users
+        self.width, self.height = self.__myImage.size
+
+        #Closing the file that we've opened
+        self.__myImage.close()
     #END DEF
 
     def __as_array(self):
