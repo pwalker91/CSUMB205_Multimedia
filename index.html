@@ -66,20 +66,20 @@
 <h2>
 <a id="installation-on-windows" class="anchor" href="#installation-on-windows" aria-hidden="true"><span class="octicon octicon-link"></span></a>INSTALLATION on WINDOWS</h2>
 
-<ol>
-<li><p>If you are using Windows, make sure to check the option to <em>add the</em> <strong>python.exe</strong> <em>to your path</em>. PIP will not work otherwise.
+<p>If you are using Windows, make sure to check the option to <em>add the</em> <strong>python.exe</strong> <em>to your path</em>. PIP will not work otherwise.
 <img src="https://cloud.githubusercontent.com/assets/6844526/6278829/204e939c-b84f-11e4-8aae-4a7f1e73a6aa.PNG" alt="What option to check">
-Be sure to change the red X to the same symbols as the above options</p></li>
-<li><p>Windows 8 users will also need to download and install the <a href="http://sourceforge.net/projects/numpy/files/NumPy/1.9.1/numpy-1.9.1-win32-superpack-python3.4.exe/download">numpy package</a> manually from the link given.</p></li>
-<li><p>Please go to the command prompt and try typing <code>python</code>. If you get back the error message <code>"python" is not a recognized command</code>, please restart your computer.</p></li>
-<li>
+Be sure to change the red X to the same symbols as the above options</p>
+
+<p>Windows 8 users will also need to download and install the <a href="http://sourceforge.net/projects/numpy/files/NumPy/1.9.1/numpy-1.9.1-win32-superpack-python3.4.exe/download">numpy package</a> manually from the link given.</p>
+
+<p>Please go to the command prompt and try typing <code>python</code>. If you get back the error message <code>"python" is not a recognized command</code>, please restart your computer.</p>
+
 <p>You can download this package through the use of PIP, a built-in package installer that comes with Python 3.4.2. Go to the start menu and open an administrator command prompt. Then run...</p>
 
-<p>pip install csumb205-multimedia</p>
-</li>
-</ol>
+<pre><code> pip install csumb205-multimedia
+</code></pre>
 
-<p>Before pressing enter, your Command Prompt screen should look like this...
+<p>Before pressing enter, your Command Prompt screen should look similar to this...
 <img src="https://cloud.githubusercontent.com/assets/6844526/6278828/204da70c-b84f-11e4-9f6a-32816d371379.PNG" alt="Command to type"></p>
 
 <hr>
@@ -109,7 +109,7 @@ Be sure to change the red X to the same symbols as the above options</p></li>
 
 <p>Now you can start creating Python scripts. You can also keep playing around with the package in the Python Shell, which is what the rest of the directions assume. If you wish to save all of these commands in a Python file (extension is .py) that can be executed in it's entirety, go to File, then New File, and start writing these commands in the new window.</p>
 
-<p>This is how you actually create an Image object.</p>
+<p>This is how you create an Image object.</p>
 
 <pre><code> &gt;&gt;&gt; myImage = rgbImage("/absolute/path/to/your/image")
 </code></pre>
@@ -121,7 +121,7 @@ Be sure to change the red X to the same symbols as the above options</p></li>
 
 <p>Typing the above command will open a GUI box, where you can chose the image you wish to import.</p>
 
-<p>Now that we have our image imported, and stored in the object myImage, we can get the width and heigh individually...</p>
+<p>Now that we have our image imported, and stored in the object myImage, we can get the width and height individually...</p>
 
 <pre><code> &gt;&gt;&gt; myWidth = myImage.width
  &gt;&gt;&gt; myHeight = myImage.height
@@ -147,10 +147,9 @@ Be sure to change the red X to the same symbols as the above options</p></li>
 
 <p>Each pixel is represented by an <code>rgbPixel</code> object. These objects have a "red", "green", and "blue" attribute, which are integers. We can then loop through every pixels and set it's green, blue or red values as we see fit.</p>
 
-<pre><code>  &gt;&gt;&gt; for row in myImage.getAllPixels:
-  ...    for pixel in row:
-  ...        pixel.setRed(255)
-  ...        pixel.setBlue(0)
+<pre><code>  &gt;&gt;&gt; for pixel in myImage.getAllPixels:
+  ...     pixel.setRed(255)
+  ...     pixel.setBlue(0)
 </code></pre>
 
 <p>If a pixel's attribute is set to anything above 255 or below 0, the object will automatically wrap the value around until the number is between 0 and 255. For example, setting a pixel's red value to 300 will actually set it to 300-256, or 44.</p>
