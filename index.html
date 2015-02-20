@@ -84,13 +84,14 @@ Be sure to change the red X to the same symbols as the above options</p></li>
 </ol>
 
 <p>Here's what you should after typing in the command...
-<img src="https://cloud.githubusercontent.com/assets/6844526/6278828/204da70c-b84f-11e4-9f6a-32816d371379.PNG" alt="Command to type">
-You then simply press enter.</p>
+<img src="https://cloud.githubusercontent.com/assets/6844526/6278828/204da70c-b84f-11e4-9f6a-32816d371379.PNG" alt="Command to type"></p>
+
+<p>You then simply press enter.</p>
 
 <hr>
 
 <h2>
-<a id="installation-mac-osx" class="anchor" href="#installation-mac-osx" aria-hidden="true"><span class="octicon octicon-link"></span></a>INSTALLATION MAC OSX</h2>
+<a id="installation-on-mac-osx" class="anchor" href="#installation-on-mac-osx" aria-hidden="true"><span class="octicon octicon-link"></span></a>INSTALLATION on MAC OSX</h2>
 
 <p>On Mac OSX, you will have multiple versions of Python. You <em>still</em> need to install Python 3.4.2, but you will open Terminal, and type the command...</p>
 
@@ -98,8 +99,9 @@ You then simply press enter.</p>
 </code></pre>
 
 <p>Here's what you should after typing in the command...
-<img src="https://cloud.githubusercontent.com/assets/6844526/6278864/71274c64-b84f-11e4-8c04-254c4686cc7d.jpg" alt="Command to type">
-You then simply press enter.</p>
+<img src="https://cloud.githubusercontent.com/assets/6844526/6278864/71274c64-b84f-11e4-8c04-254c4686cc7d.jpg" alt="Command to type"></p>
+
+<p>You then simply press enter.</p>
 
 <hr>
 
@@ -110,7 +112,7 @@ You then simply press enter.</p>
 
 <p>Once you have started the application, you will be greeted with the Python Shell. Each line will start with <code>&gt;&gt;&gt;</code>, which is the Python command prompt (similar to <code>$</code> on Mac and <code>C:\&gt;</code> on Windows). To make sure that you have correctly installed the package through use of PIP, type this command... (again, do not copy in the <code>&gt;&gt;&gt;</code>)</p>
 
-<pre><code> &gt;&gt;&gt; from imageClass import rgbImage
+<pre><code> &gt;&gt;&gt; from simpleImage import rgbImage
 </code></pre>
 
 <p>Now you can start creating Python scripts. You can also keep playing around with the package in the Python Shell, which is what the rest of the directions assume. If you wish to save all of these commands in a Python file (extension is .py) that can be executed in it's entirety, go to File, then New File, and start writing these commands in the new window.</p>
@@ -122,8 +124,10 @@ You then simply press enter.</p>
 
 <p>NOTE: If you leave the constructor empty, tkinter will open a file dialog, asking you to choose a file.</p>
 
-<pre><code> &gt;&gt;&gt; myImage = rgbImage("")  ===&gt;  tkinter filedialog GUI
+<pre><code> &gt;&gt;&gt; myImage = rgbImage("")
 </code></pre>
+
+<p>Typing the above command will open a GUI box, where you can chose the image you wish to import.</p>
 
 <p>Now that we have our image imported, and stored in the object myImage, we can get the width and heigh individually...</p>
 
@@ -163,6 +167,8 @@ You then simply press enter.</p>
 </code></pre>
 
 <p>For more detailed information on the <code>rgbImage</code> class and the <code>rgbPixel</code> class, type <code>help('simpleImage.ImageClass')</code> in the Python Shell, or check out <a href="./moduleHelp.txt">this text file</a> for a printout of the previous command.</p>
+
+<p>For a more simple document on this class' functions, please see this file. This file has a list of the functions available to the user in the <code>rgbImage</code> class and <code>rgbPixel</code> class. Also listed are the expected inputs and outputs.</p>
 
 <hr>
 
