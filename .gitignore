@@ -42,4 +42,4 @@ coverage.xml
 docs/_build/
 
 # Extraneous files
-_build_deploy_help.txt
+*_help.txt
