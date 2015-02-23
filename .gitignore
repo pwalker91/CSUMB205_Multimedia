@@ -1,6 +1,3 @@
-# Backup files
-*.~
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -9,6 +6,8 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+.Python
+env/
 bin/
 build/
 develop-eggs/
@@ -21,14 +20,16 @@ sdist/
 var/
 *.egg-info/
 .installed.cfg
+setup.cfg
 *.egg
-MANIFEST
+MANIFEST.in
 
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
+htmlcov/
 .tox/
 .coverage
 .cache
@@ -38,8 +39,20 @@ coverage.xml
 # Translations
 *.mo
 
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# Rope
+.ropeproject
+
+# Django stuff:
+*.log
+*.pot
+
 # Sphinx documentation
 docs/_build/
 
-# Extraneous files
+# package distribution help
 *_help.txt
