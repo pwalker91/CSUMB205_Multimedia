@@ -22,7 +22,6 @@ var/
 .installed.cfg
 setup.cfg
 *.egg
-MANIFEST.in
 
 # Installer logs
 pip-log.txt
