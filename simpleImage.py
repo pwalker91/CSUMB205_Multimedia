@@ -408,12 +408,12 @@ class rgbImage(object):
         """
         Object initialization
         ARGS:
-            self        this Object
-            filename    String, the location of the picture
-            saveTo      String, the location that this picture will be saved to
-            blank       Boolean, whether this image should be a blank image
-                width   Integer, the width of the blank image
-                height  Integer, the height of the blank image
+            self            this Object
+            inputFilename   String, the location of the picture
+            outputFilename  String, the location that this picture will be saved to
+            blank           Boolean, whether this image should be a blank image
+                width       Integer, the width of the blank image
+                height      Integer, the height of the blank image
         """
         self.__blank = blank
         if not self.__blank:
