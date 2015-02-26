@@ -458,6 +458,50 @@ class rgbImage(object):
         self.reset()
     #END DEF
 
+
+    # CLASS SPECIFIC DECORATORS and CHECKERS -----------------------------------
+
+    def __checkCoordPair(func):
+        def coord_wrapper(*args, **kwargs):
+            def checkPoint(val, maxVal):
+                if val<0 or val>maxVal:
+                    return False
+            #END DEF
+
+            if isinstance(args[1], (tuple,list)):
+                if len(args[1])!=2:
+                    raise ValueError("You must pass in two values as a coordinate. "+
+                                     "Was passed {}".format(repr(args[1]))
+                                     )
+                if not all([isinstance(coord, int) for coord in args[1]]):
+                    raise ValueError("You must pass in two integers for coordinates. "+
+                                     "Was passed {}".format(repr(args[1]))
+                                     )
+                x,y = tuple(args[1])
+                if not checkPoint(x, args[0].width-1) and not checkPoint(y, args[0].height-1):
+                    raise ValueError("You must pass in POSITIVE integers. "+
+                                     "Was passed {}".format(repr([x,y]))
+                                     )
+            else:
+                if not all( [isinstance(elem,int) for elem in [args[1],args[2]]] ):
+                    raise ValueError("You must pass in integer value. "+
+                                     "Was passed {}".format(repr([args[1],args[2]]))
+                                     )
+                x = args[1]
+                y = args[2]
+                if not checkPoint(x, args[0].width-1) and not checkPoint(y, args[0].height-1):
+                    raise ValueError("You must pass in POSITIVE integers. "+
+                                     "Was passed {}".format(repr([x,y]))
+                                     )
+            #END IF/ELSE
+            return func(*args, **kwargs)
+        return coord_wrapper
+    #END DEF
+
+
+    # GETTERS ------------------------------------------------------------------
+
+    @__checkCoordPair
     def getPixel(self, *args):
         """
         Gets an rgbPixel object at the specified (x,y) coordinate
