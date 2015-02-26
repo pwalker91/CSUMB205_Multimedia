@@ -103,14 +103,17 @@ class rgbPixel(object):
             #This will make sure that the value is between 0 and 255, by iteratively
             # adding or subtracting 256
             while args[1] > 255 or args[1] < 0:
-                if args[1] < 0:     args[1] += 256
-                elif args[1] > 255: args[1] -= 256
+                if args[1] < 0:
+                    args[1] += 256
+                elif args[1] > 255:
+                    args[1] -= 256
             #END WHILE
             #Casting args back to being a tuple
             args = tuple(args)
             return func(*args, **kwargs)
         return wrapper
     #END DEF
+
     def __checkCoord(func):
         """
         A decorator that will make sure that the coordinate arguments passed are viable.
