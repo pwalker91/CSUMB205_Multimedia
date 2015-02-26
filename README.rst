@@ -14,7 +14,7 @@ To install:
   3. Use the developed modules within Python (currently only an RGB Image class)
     `from simpleImage import rgbImage`
 
-This project's Github IO page can be found here.
+This project's Github IO page, which contains more complete documentation on installation and usage, can be found here.
 http://pwalker91.github.io/CSUMB205_Multimedia
 
 The Python Package Index page can be found here.
