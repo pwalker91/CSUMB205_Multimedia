@@ -1,11 +1,16 @@
------------------------------------------------------------
-CSUMB's CST205 - A simple Image Class
------------------------------------------------------------
+CSUMB's CST205 - Multimedia Manipulation
+========================================
 
-This project offers students acces to a simple 'rgbImage' class through
-the import of 'simpleImage', which is built on the use of the
-Image module in the PIL package. As PIL is no longer updated for Python 3,
-this package relies on Pillow.
+Simple Multimedia Classes
+-------------------------
+
+This project offers students access to simple Python classes that allow for the
+manipulation of different multimedia types.
+
+Currently, the only ones developed are:
+    simpleImage
+        rgbImage
+        rgbPixel
 
 The other modules installed are currently in developed. This includes:
   simpleAudio
@@ -14,10 +19,11 @@ The other modules installed are currently in developed. This includes:
 
 Documentation
 -----------------------------------------------------------
-Some simple documentation is available at
+Documentation, and installation instructions, are available at
 http://pwalker91.github.io/CSUMB205_Image
 
+
+-----------------------------------------------------------
 Contributors
 -----------------------------------------------------------
 * Peter Walker https://github.com/pwalker91
------------------------------------------------------------

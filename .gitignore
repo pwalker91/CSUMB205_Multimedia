@@ -2,10 +2,10 @@
 __pycache__/
 *.py[cod]
 
-# C extensions
+# C EXTENSION
 *.so
 
-# Distribution / packaging
+# DISTRIBUTION / PACKAGING
 .Python
 env/
 bin/
@@ -23,7 +23,14 @@ var/
 setup.cfg
 *.egg
 
-# Installer logs
+# DOCUMENTATION
+docs/html/
+
+# package distribution help
+*_help.txt
+
+
+# INSTALLER LOGS
 pip-log.txt
 pip-delete-this-directory.txt
 
@@ -38,20 +45,9 @@ coverage.xml
 # Translations
 *.mo
 
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
-
-# Rope
-.ropeproject
-
 # Django stuff:
 *.log
 *.pot
 
 # Sphinx documentation
 docs/_build/
-
-# package distribution help
-*_help.txt
