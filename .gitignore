@@ -25,9 +25,10 @@ setup.cfg
 
 # DOCUMENTATION
 docs/html/
+sphinx_config
 
-# package distribution help
-*_help.txt
+# PACKAGE DIST HELP
+	*_help.txt
 
 
 # INSTALLER LOGS
