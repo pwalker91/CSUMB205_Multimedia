@@ -23,6 +23,7 @@ import os
 #import subprocess
 from numpy import asarray, uint8
 from tkinter.filedialog import (askdirectory, askopenfilename)
+from tkinter import Tk
 from PIL import Image
 #END IMPORTS
 
@@ -415,6 +416,11 @@ class rgbImage(object):
         self.__blank = blank
         if not self.__blank:
             if not inputFilename:
+                #These three lines are here because....
+                __ = Tk()
+                __.update()
+                __.withdraw()  #Don't know why, but this makes it so that the file dialog leaves
+                #Now we ask for our file name
                 self.inputFilename = askopenfilename(initialdir=os.path.expanduser("~"),
                                                      title="Select the IMAGE FILE",
                                                      filetypes=[('JPG Image', '.jpg'),
@@ -551,6 +557,11 @@ class rgbImage(object):
             raise ValueError("You must pass in a string for your new image name")
         if self.__blank and not self.outputFilename:
             print("Please choose the directory you will want the file saved in...")
+            #These three lines are here because....
+            __ = Tk()
+            __.update()
+            __.withdraw()  #Don't know why, but this makes it so that the file dialog leaves
+            #Now we ask for our file name
             outputPath = askdirectory(initialdir=os.path.expanduser("~"),
                                       title="Select the FOLDER to contain the image",
                                       mustexist=True)
@@ -586,17 +597,20 @@ class rgbImage(object):
             none
         RAISES:
             none.
-            Will ask user if they wish to overwrite a file if it exists at the given
-             location in filename, or at self.outputFilename
         """
-        if not self.outputFilename:
+        if self.outputFilename=="":
             print("Please choose the directory you will want the file saved in...")
+            #These three lines are here because....
+            __ = Tk()
+            __.update()
+            __.withdraw()  #Don't know why, but this makes it so that the file dialog leaves
+            #Now we ask for our file name
             outputPath = askdirectory(initialdir=os.path.expanduser("~"),
                                       title="Select the FOLDER to contain the image",
                                       mustexist=True)
             name = "simpleImage_output.jpg"
             self.outputFilename = os.path.abspath(os.path.join(outputPath, name))
-        if filename:
+        if filename!="":
             self.setName(filename)
         #array needs to be an array of rows, each row needs to be an array of
         # pixels, and each pixel an array of pixel values (R,G,B)
