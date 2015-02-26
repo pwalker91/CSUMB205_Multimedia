@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages  # Always prefer setuptools over distutils
+from setuptools import setup
 from codecs import open  # To use a consistent encoding
 from os import path
 
@@ -14,9 +14,9 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.8.5',
+    version='0.8.6',
 
-    description='A easier-to-use, academic wrapper class some multimedia modules',
+    description='A easier-to-use, academic wrapper class for different multimedia',
     long_description=long_description,
 
     # The project's main homepage.
