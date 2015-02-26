@@ -534,6 +534,38 @@ class rgbImage(object):
         return allPixels
     #END DEF
 
+    def setName(self, name):
+        """
+        Given a new name (as a String), sets the output filename
+        ARGS:
+            name    String, the new name of the to-be-saved file
+        RETURNS:
+            Boolean, True if file does not exist, False otherwise
+        RAISES:
+            Value Error if name is not string
+        """
+        if not isinstance(name, str):
+            raise ValueError("You must pass in a string for your new image name")
+        if not self.outputFilename:
+            dirname = path.dirname(self.inputFilename)
+            filename = path.basename(self.inputFilename)
+            filename = name+"."+filename.split(".")[1]
+            self.outputFilename = path.join(dirname, filename)
+        else:
+            dirname = path.dirname(self.outputFilename)
+            filename = path.basename(self.outputFilename)
+            filename = name+"."+filename.split(".")[1]
+            self.outputFilename = path.join(dirname, filename)
+        #END IF/ELSE
+        if path.isfile(self.outputFilename):
+            print("{} will be overwritten if this image is saved. ".format(path.basename(self.outputFilename))+
+                  "Consider saving to another location."
+                  )
+            return False
+        #END IF
+        return True
+    #END DEF
+
     def save(self, filename="", forceOverwrite=False):
         """
         This will save the current object to a specified location
@@ -549,13 +581,7 @@ class rgbImage(object):
             Will ask user if they wish to overwrite a file if it exists at the given
              location in filename, or at self.outputFilename
         """
-        if filename:
-            self.outputFilename = path.abspath(filename)
-        if path.isfile(self.outputFilename) and not forceOverwrite:
-            overwrite = input( "{} will be overwritten. Continue? (y/n) ".format(self.outputFilename) )
-            if overwrite.lower() != "y":
-                return
-        #END IF
+        self.setName(filename)
         #array needs to be an array of rows, each row needs to be an array of
         # pixels, and each pixel an array of pixel values (R,G,B)
         img_to_array = asarray(self.__as_array())
