@@ -8,14 +8,6 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
-<link href="navtree.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="resize.js"></script>
-<script type="text/javascript" src="navtreedata.js"></script>
-<script type="text/javascript" src="navtree.js"></script>
-<script type="text/javascript">
-  $(document).ready(initResizable);
-  $(window).load(resizeHeight);
-</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -32,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">CSUMB 205 Multimedia
-   &#160;<span id="projectnumber">0.8.7</span>
+   &#160;<span id="projectnumber">0.8.8</span>
    </div>
    <div id="projectbrief">An easy-to-use wrapper module for the PIL module</div>
   </td>
@@ -74,20 +66,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     </ul>
   </div>
 </div><!-- top -->
-<div id="side-nav" class="ui-resizable side-nav-resizable">
-  <div id="nav-tree">
-    <div id="nav-tree-contents">
-      <div id="nav-sync" class="sync"></div>
-    </div>
-  </div>
-  <div id="splitbar" style="-moz-user-select:none;" 
-       class="ui-resizable-handle">
-  </div>
-</div>
-<script type="text/javascript">
-$(document).ready(function(){initNavTree('simple_image_8py_source.html','');});
-</script>
-<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -517,12 +495,12 @@ $(document).ready(function(){initNavTree('simple_image_8py_source.html','');});
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;<span class="stringliteral">        Object initialization</span></div>
 <div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;<span class="stringliteral">        ARGS:</span></div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;<span class="stringliteral">            self        this Object</span></div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;<span class="stringliteral">            filename    String, the location of the picture</span></div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;<span class="stringliteral">            saveTo      String, the location that this picture will be saved to</span></div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;<span class="stringliteral">            blank       Boolean, whether this image should be a blank image</span></div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;<span class="stringliteral">                width   Integer, the width of the blank image</span></div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;<span class="stringliteral">                height  Integer, the height of the blank image</span></div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;<span class="stringliteral">            self            this Object</span></div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;<span class="stringliteral">            inputFilename   String, the location of the picture</span></div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;<span class="stringliteral">            outputFilename  String, the location that this picture will be saved to</span></div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;<span class="stringliteral">            blank           Boolean, whether this image should be a blank image</span></div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;<span class="stringliteral">                width       Integer, the width of the blank image</span></div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;<span class="stringliteral">                height      Integer, the height of the blank image</span></div>
 <div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;        self.<a class="code" href="classsimple_image_1_1rgb_image.html#a1e19a6387e3f6653ae766df943731264">__blank</a> = blank</div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        <span class="keywordflow">if</span> <span class="keywordflow">not</span> self.<a class="code" href="classsimple_image_1_1rgb_image.html#a1e19a6387e3f6653ae766df943731264">__blank</a>:</div>
@@ -813,15 +791,11 @@ $(document).ready(function(){initNavTree('simple_image_8py_source.html','');});
 <div class="ttc" id="classsimple_image_1_1rgb_pixel_html_a9b3eb015de9adb9dd35949af49a695b7"><div class="ttname"><a href="classsimple_image_1_1rgb_pixel.html#a9b3eb015de9adb9dd35949af49a695b7">simpleImage.rgbPixel.__setY</a></div><div class="ttdeci">def __setY(self, coord)</div><div class="ttdef"><b>Definition:</b> <a href="simple_image_8py_source.html#l00201">simpleImage.py:201</a></div></div>
 <div class="ttc" id="classsimple_image_1_1rgb_pixel_html_ad35b789804ea107f06e7d98d8ba965a9"><div class="ttname"><a href="classsimple_image_1_1rgb_pixel.html#ad35b789804ea107f06e7d98d8ba965a9">simpleImage.rgbPixel.__blue</a></div><div class="ttdeci">int __blue</div><div class="ttdef"><b>Definition:</b> <a href="simple_image_8py_source.html#l00056">simpleImage.py:56</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
-</div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><b>simpleImage.py</b></li>
-    <li class="footer">Generated on Wed Feb 25 2015 23:01:21 for CSUMB 205 Multimedia by
-    <a href="http://www.doxygen.org/index.html">
-    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
-  </ul>
-</div>
+<hr class="footer"/><address class="footer"><small>
+Generated on Wed Feb 25 2015 23:07:49 for CSUMB 205 Multimedia by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.9.1
+</small></address>
 </body>
 </html>
