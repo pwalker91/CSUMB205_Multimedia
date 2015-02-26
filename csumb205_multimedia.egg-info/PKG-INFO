@@ -1,0 +1,46 @@
+Metadata-Version: 1.1
+Name: csumb205-multimedia
+Version: 0.8.5
+Summary: A easier-to-use, academic wrapper class some multimedia modules
+Home-page: https://github.com/pwalker91/CSUMB205_Multimedia
+Author: Peter Walker
+Author-email: pwalker@csumb.edu
+License: MIT
+Description: -----------------------------------------------------------
+        CSUMB's CST205 - A simple Image Class
+        -----------------------------------------------------------
+        
+        This project offers students acces to a simple 'rgbImage' class through
+        the import of 'simpleImage', which is built on the use of the
+        Image module in the PIL package. As PIL is no longer updated for Python 3,
+        this package relies on Pillow.
+        
+        The other modules installed are currently in developed. This includes:
+          simpleAudio
+          simpleVideo
+        
+        
+        Documentation
+        -----------------------------------------------------------
+        Some simple documentation is available at
+        http://pwalker91.github.io/CSUMB205_Image
+        
+        Contributors
+        -----------------------------------------------------------
+        * Peter Walker https://github.com/pwalker91
+        -----------------------------------------------------------
+        
+Keywords: image multimedia manipulation education csumb 205
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Education
+Classifier: Topic :: Artistic Software
+Classifier: Topic :: Education
+Classifier: Topic :: Multimedia
+Classifier: Topic :: Multimedia :: Graphics
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows :: Windows 7

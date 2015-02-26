@@ -1,0 +1,3 @@
+simpleImage
+simpleVideo
+simpleAudio

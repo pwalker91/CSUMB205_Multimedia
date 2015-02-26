@@ -1,0 +1,13 @@
+DESCRIPTION.rst
+MANIFEST.in
+README.rst
+setup.cfg
+setup.py
+simpleAudio.py
+simpleImage.py
+simpleVideo.py
+csumb205_multimedia.egg-info/PKG-INFO
+csumb205_multimedia.egg-info/SOURCES.txt
+csumb205_multimedia.egg-info/dependency_links.txt
+csumb205_multimedia.egg-info/requires.txt
+csumb205_multimedia.egg-info/top_level.txt
