@@ -136,21 +136,57 @@ class rgbPixel(object):
         return wrapper
     #END DEF
 
+    def __sameObject(func):
+        def wrapper(*args, **kwargs):
+            if not isinstance(args[1], args[0].__class__):
+                raise TypeError("You must compare objects of the same type. Cannot compare "+
+                                "{0} and {1}".format(args[0].__class__, args[1].__class__))
+            return func(*args, **kwargs)
+        return wrapper
+    #END DEF
+
+    def __isPixel(self, pixel):
+        """Simple function to make sure that the passed object is a pixel"""
+        if not isinstance(pixel, self.__class__):
+            raise ValueError("You must give an rgbPixel object to 'pixel'")
+        return True
+    #END DEF
+
+    def __isColor(self, color):
+        """Simple function to make sure that the passed color has 3 integers"""
+        if not isinstance(color, (tuple,list)) and len(color) != 3:
+            raise ValueError("You must give an RGB value as a tuple (r,g,b) to 'color'")
+        if not all( [isinstance(val, int) for val in list(color)] ):
+            raise ValueError("You must give three RGB values as integers to the keyword arg 'color'")
+        return True
+    #END DEF
+
+
+    # GETTERS AND SETTERS ------------------------------------------------------
+
     #Color setting functions
     @__checkVal
     def setRed(self, val):
+        """Sets the RED values to given number"""
         self.__red = val
     def getRed(self):
+        """Gets the RED value of the picture"""
         return self.__red
+
     @__checkVal
     def setGreen(self, val):
+        """Sets the GREEN values to given number"""
         self.__green = val
     def getGreen(self):
+        """Gets the GREEN value of the picture"""
         return self.__green
+
     @__checkVal
     def setBlue(self, val):
+        """Sets the BLUE values to given number"""
         self.__blue = val
     def getBlue(self):
+        """Gets the BLUE value of the picture"""
         return self.__blue
 
     #Coordinate setting functions
@@ -268,11 +304,9 @@ class rgbPixel(object):
         if not any( [elem in kwargs for elem in ["color", "pixel"]] ):
             raise KeyError("You must pass either a color or pixel through the keywords 'color' or 'pixel'")
         if "color" in kwargs:
-            if not isinstance(kwargs['color'], (tuple,list)) and len(kwargs['color']) != 3:
-                raise ValueError("You must give an RGB value as a tuple (r,g,b) to 'color'")
+            self.__isColor(kwargs['color'])
         elif "pixel" in kwargs:
-            if (self.__class__ != kwargs['pixel'].__class__):
-                raise ValueError("You must give an rgbPixel object to 'pixel'")
+            self.__isPixel(kwargs['pixel'])
         #END IF/ELIF
         if "color" in kwargs:
             givenR, givenG, givenB = kwargs['color']
@@ -289,8 +323,7 @@ class rgbPixel(object):
         Returns the length distance between two rgbPixels according to their
          X and Y values.
         """
-        if not isinstance(pixel, self.__class__):
-            raise ValueError("You must pass an rgbPixel to this function")
+        self.__isPixel(pixel)
         xDist = pixel.getX()-self.getX()
         yDist = pixel.getY()-self.getY()
         from math import sqrt
