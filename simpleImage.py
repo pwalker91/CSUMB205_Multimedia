@@ -404,7 +404,7 @@ class rgbImage(object):
     # ----------------------------
 
 
-    def __init__(self, filename="", saveTo="", blank=False, width=100, height=100):
+    def __init__(self, inputFilename="", outputFilename="", blank=False, width=100, height=100):
         """
         Object initialization
         ARGS:
@@ -417,7 +417,7 @@ class rgbImage(object):
         """
         self.__blank = blank
         if not self.__blank:
-            if not filename:
+            if not inputFilename:
                 self.inputFilename = askopenfilename(initialdir=path.expanduser("~"),
                                                      title="Select the FILE containing the raw data",
                                                      filetypes=[('JPG Image', '.jpg'),
@@ -429,20 +429,20 @@ class rgbImage(object):
                 if not self.inputFilename:
                     raise ValueError("You must choose a file for this class to work.")
             else:
-                self.inputFilename = path.abspath(filename).replace("\\","").strip()
+                self.inputFilename = path.abspath(inputFilename).replace("\\","").strip()
                 acceptedExt = ["jpg","jpeg","png","gif"]
                 if not path.isfile(self.inputFilename) or \
                         self.inputFilename.split(".")[-1].lower() not in acceptedExt:
                     raise ValueError("You must pass in a legitimate picture file. "+
                                      "Use one of the following options:"+str(acceptedExt))
             #END IF/ELSE
-            if not saveTo:
+            if not outputFilename:
                 dirname = path.dirname(self.inputFilename)
                 filename = path.basename(self.inputFilename)
                 filename = filename.split(".")[0]+"_altered."+filename.split(".")[1]
                 self.outputFilename = path.join(dirname, filename)
             else:
-                self.outputFilename = path.abspath(saveTo)
+                self.outputFilename = path.abspath(outputFilename)
             #END IF/ELSE
             if path.isfile(self.outputFilename):
                 print("{} will be overwritten if this image is saved. ".format(path.basename(self.outputFilename))+
