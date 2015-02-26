@@ -555,7 +555,11 @@ class rgbImage(object):
         """
         if not isinstance(name, str):
             raise ValueError("You must pass in a string for your new image name")
-        if self.__blank and not self.outputFilename:
+        #If the path given is an absolute path, just set that
+        if os.path.isabs(name):
+            self.outputFilename = os.path.abspath(name)
+        #If the image was a blank image, then we open a file dialog
+        elif self.__blank and not self.outputFilename:
             print("Please choose the directory you will want the file saved in...")
             #These three lines are here because....
             __ = Tk()
@@ -567,13 +571,16 @@ class rgbImage(object):
                                       mustexist=True)
             name = os.path.splitext(name)[0]+".png"
             self.outputFilename = os.path.abspath(os.path.join(outputPath, name))
+        #If the image was not blank, then we see if outputFilename is set. If not, we
+        # will use the inputFilename as a base folder
         elif not self.outputFilename:
             dirname = os.path.dirname(self.inputFilename)
-            name = name+"."+os.path.splitext(self.inputFilename)[1]
+            name = os.path.basename(name)+"."+os.path.splitext(self.inputFilename)[1]
             self.outputFilename = os.path.abspath(os.path.join(dirname, name))
+        #Otherwise, we use the already existing outputFilename as a base
         else:
             dirname = os.path.dirname(self.outputFilename)
-            name = name+"."+os.path.splitext(self.outputFilename)[1]
+            name = os.path.basename(name)+"."+os.path.splitext(self.outputFilename)[1]
             self.outputFilename = os.path.abspath(os.path.join(dirname, name))
         #END IF/ELSE
         if os.path.isfile(self.outputFilename):
