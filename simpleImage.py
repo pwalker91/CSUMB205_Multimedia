@@ -18,10 +18,7 @@ CLASSES-
 
 # IMPORTS
 from platform import system
-if system() == "Windows":
-    import ntpath as path
-else:
-    from os import path
+import os
 #import sys
 #import subprocess
 from numpy import asarray, uint8
@@ -418,7 +415,7 @@ class rgbImage(object):
         self.__blank = blank
         if not self.__blank:
             if not inputFilename:
-                self.inputFilename = askopenfilename(initialdir=path.expanduser("~"),
+                self.inputFilename = askopenfilename(initialdir=os.path.expanduser("~"),
                                                      title="Select the IMAGE FILE",
                                                      filetypes=[('JPG Image', '.jpg'),
                                                                 ('JPEG Image', '.jpeg'),
@@ -429,24 +426,27 @@ class rgbImage(object):
                                                      )
                 if not self.inputFilename:
                     raise ValueError("You must choose a file for this class to work.")
+                self.inputFilename = os.path.abspath(self.inputFilename)
             else:
-                self.inputFilename = path.abspath(inputFilename).replace("\\","").strip()
+                self.inputFilename = os.path.abspath(inputFilename)
+                if system()!="Windows":
+                    self.inputFilename = self.inputFilename.replace("\\","").strip()
                 acceptedExt = ["jpg","jpeg","png","gif"]
-                if not path.isfile(self.inputFilename) or \
+                if not os.path.isfile(self.inputFilename) or \
                         self.inputFilename.split(".")[-1].lower() not in acceptedExt:
                     raise ValueError("You must pass in a legitimate picture file. "+
                                      "Use one of the following options:"+str(acceptedExt))
             #END IF/ELSE
             if not outputFilename:
-                dirname = path.dirname(self.inputFilename)
-                filename = path.basename(self.inputFilename)
+                dirname = os.path.dirname(self.inputFilename)
+                filename = os.path.basename(self.inputFilename)
                 filename = filename.split(".")[0]+"_altered."+filename.split(".")[1]
-                self.outputFilename = path.join(dirname, filename)
+                self.outputFilename = os.path.join(dirname, filename)
             else:
-                self.outputFilename = path.abspath(outputFilename)
+                self.outputFilename = os.path.abspath(outputFilename)
             #END IF/ELSE
-            if path.isfile(self.outputFilename):
-                print("{} will be overwritten if this image is saved. ".format(path.basename(self.outputFilename))+
+            if os.path.isfile(self.outputFilename):
+                print("{} will be overwritten if this image is saved. ".format(os.path.basename(self.outputFilename))+
                       "Consider saving to another location."
                       )
             #END IF
@@ -551,24 +551,22 @@ class rgbImage(object):
             raise ValueError("You must pass in a string for your new image name")
         if self.__blank and not self.outputFilename:
             print("Please choose the directory you will want the file saved in...")
-            outputPath = askdirectory(initialdir=path.expanduser("~"),
+            outputPath = askdirectory(initialdir=os.path.expanduser("~"),
                                       title="Select the FOLDER to contain the image",
                                       mustexist=True)
-            name = name.rsplit(".",1)[0]+".jpg"
-            self.outputFilename = path.abspath(path.join(outputPath, name))
+            name = os.path.splitext(name)[0]+".png"
+            self.outputFilename = os.path.abspath(os.path.join(outputPath, name))
         elif not self.outputFilename:
-            dirname = path.dirname(self.inputFilename)
-            filename = path.basename(self.inputFilename)
-            filename = name+"."+filename.split(".")[1]
-            self.outputFilename = path.abspath(path.join(dirname, filename))
+            dirname = os.path.dirname(self.inputFilename)
+            name = name+"."+os.path.splitext(self.inputFilename)[1]
+            self.outputFilename = os.path.abspath(os.path.join(dirname, name))
         else:
-            dirname = path.dirname(self.outputFilename)
-            filename = path.basename(self.outputFilename)
-            filename = name+"."+filename.split(".")[1]
-            self.outputFilename = path.abspath(path.join(dirname, filename))
+            dirname = os.path.dirname(self.outputFilename)
+            name = name+"."+os.path.splitext(self.outputFilename)[1]
+            self.outputFilename = os.path.abspath(os.path.join(dirname, name))
         #END IF/ELSE
-        if path.isfile(self.outputFilename):
-            print("{} will be overwritten if this image is saved. ".format(path.basename(self.outputFilename))+
+        if os.path.isfile(self.outputFilename):
+            print("{} will be overwritten if this image is saved. ".format(os.path.basename(self.outputFilename))+
                   "Consider saving to another location."
                   )
             return False
@@ -593,11 +591,11 @@ class rgbImage(object):
         """
         if not self.outputFilename:
             print("Please choose the directory you will want the file saved in...")
-            outputPath = askdirectory(initialdir=path.expanduser("~"),
+            outputPath = askdirectory(initialdir=os.path.expanduser("~"),
                                       title="Select the FOLDER to contain the image",
                                       mustexist=True)
             name = "simpleImage_output.jpg"
-            self.outputFilename = path.abspath(path.join(outputPath, name))
+            self.outputFilename = os.path.abspath(os.path.join(outputPath, name))
         if filename:
             self.setName(filename)
         #array needs to be an array of rows, each row needs to be an array of
@@ -666,7 +664,7 @@ class rgbImage(object):
 
     def __str__(self):
         """Returns a string representation of this object"""
-        shortInput = path.basename(self.inputFilename)
+        shortInput = os.path.basename(self.inputFilename)
         return ("RGB Image named {}\nSize is {}x{} pixels".format(shortInput, self.width, self.height)
                 )
     #END DEF
