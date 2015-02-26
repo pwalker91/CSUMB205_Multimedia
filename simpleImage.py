@@ -419,13 +419,14 @@ class rgbImage(object):
         if not self.__blank:
             if not inputFilename:
                 self.inputFilename = askopenfilename(initialdir=path.expanduser("~"),
-                                                     title="Select the FILE containing the raw data",
+                                                     title="Select the IMAGE FILE",
                                                      filetypes=[('JPG Image', '.jpg'),
                                                                 ('JPEG Image', '.jpeg'),
                                                                 ('GIF Image', '.gif'),
                                                                 ('PNG Image', '.png')
                                                                 ],
-                                                     multiple=False)
+                                                     multiple=False
+                                                     )
                 if not self.inputFilename:
                     raise ValueError("You must choose a file for this class to work.")
             else:
@@ -449,11 +450,12 @@ class rgbImage(object):
                       "Consider saving to another location."
                       )
             #END IF
+            print("Importing image {}".format(self.inputFilename))
         else:
             self.width, self.height = width, height
+            print("Creating Blank Image, {}x{}".format(self.width, self.height))
         #END IF/ELSE
 
-        print("Importing image {}".format(self.inputFilename))
         #Calls self.reset(), as the reset function does what we want to do initially
         self.reset()
     #END DEF
@@ -466,6 +468,7 @@ class rgbImage(object):
             def checkPoint(val, maxVal):
                 if val<0 or val>maxVal:
                     return False
+                return True
             #END DEF
 
             if isinstance(args[1], (tuple,list)):
@@ -546,16 +549,23 @@ class rgbImage(object):
         """
         if not isinstance(name, str):
             raise ValueError("You must pass in a string for your new image name")
-        if not self.outputFilename:
+        if self.__blank and not self.outputFilename:
+            print("Please choose the directory you will want the file saved in...")
+            outputPath = askdirectory(initialdir=path.expanduser("~"),
+                                      title="Select the FOLDER to contain the image",
+                                      mustexist=True)
+            name = name.rsplit(".",1)[0]+".jpg"
+            self.outputFilename = path.abspath(path.join(outputPath, name))
+        elif not self.outputFilename:
             dirname = path.dirname(self.inputFilename)
             filename = path.basename(self.inputFilename)
             filename = name+"."+filename.split(".")[1]
-            self.outputFilename = path.join(dirname, filename)
+            self.outputFilename = path.abspath(path.join(dirname, filename))
         else:
             dirname = path.dirname(self.outputFilename)
             filename = path.basename(self.outputFilename)
             filename = name+"."+filename.split(".")[1]
-            self.outputFilename = path.join(dirname, filename)
+            self.outputFilename = path.abspath(path.join(dirname, filename))
         #END IF/ELSE
         if path.isfile(self.outputFilename):
             print("{} will be overwritten if this image is saved. ".format(path.basename(self.outputFilename))+
@@ -571,7 +581,7 @@ class rgbImage(object):
         This will save the current object to a specified location
         ARGS:
             self            this Object
-            filename        OPTIONAL. String, the location to be save to.
+            filename        OPTIONAL. String, the name or location to be saved to.
             forceOverwrite  OPTIONAL. Boolean, whether to force overwrite of file
                              at location 'filename' or 'self.outputFilename'
         RETURNS:
@@ -581,7 +591,15 @@ class rgbImage(object):
             Will ask user if they wish to overwrite a file if it exists at the given
              location in filename, or at self.outputFilename
         """
-        self.setName(filename)
+        if not self.outputFilename:
+            print("Please choose the directory you will want the file saved in...")
+            outputPath = askdirectory(initialdir=path.expanduser("~"),
+                                      title="Select the FOLDER to contain the image",
+                                      mustexist=True)
+            name = "simpleImage_output.jpg"
+            self.outputFilename = path.abspath(path.join(outputPath, name))
+        if filename:
+            self.setName(filename)
         #array needs to be an array of rows, each row needs to be an array of
         # pixels, and each pixel an array of pixel values (R,G,B)
         img_to_array = asarray(self.__as_array())
