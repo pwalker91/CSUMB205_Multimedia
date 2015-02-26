@@ -31,20 +31,33 @@ from PIL import Image
 
 
 
-#CLASS
+
 class rgbPixel(object):
+
     """
-    ---------------------
-    Class Attributes
+    A simple class for accessing attributes of an RGB Pixel
+
+    ATTRIBUTES:
+        red     An integer between 0 and 255.
+                 Accessible by getRed() and setRed()
+        blue    An integer between 0 and 255.
+                 Accessible by getBlue() and setBlue()
+        green   An integer between 0 and 255.
+                 Accessible by getGreen() and setGreen()
+        X       An integer, representing the pixel's location in a picture.
+                 Accesible with getX()
+        Y       An integer, representing the pixel's location in a picture.
+                 Accesible with getY()
     """
+
+    # CLASS ATTRIBUTES -----------
     __red = 0
     __green = 0
     __blue = 0
     __x=0
     __y=0
-    """
-    ---------------------
-    """
+    # ----------------------------
+
 
     def __init__(self, *args):
         """
@@ -72,7 +85,7 @@ class rgbPixel(object):
     #END DEF
 
 
-  # GETTERS AND SETTERS ----------------------------------------------------------
+    # CLASS SPECIFIC DECORATORS and VALUE CHECKERS -----------------------------
 
     def __checkVal(func):
         """
@@ -142,13 +155,17 @@ class rgbPixel(object):
     def __setX(self, coord):
         self.__x = coord
     def getX(self):
+        """Gets the X-coordinate of this pixel in the picture"""
         return self.__x
+
     @__checkCoord
     def __setY(self, coord):
         self.__y = coord
     def getY(self):
+        """Gets the Y-coordinate of this pixel in the picture"""
         return self.__y
 
+    #Setters and Getters for multiple attributes
     def setColor(self, *args):
         """
         Sets this pixel's R,G, and B values to the given values
@@ -161,7 +178,7 @@ class rgbPixel(object):
         """
         if len(args) == 0:
             raise ValueError("You must pass in 2 NUMBER values (as a tuple or separately). "+
-                                "You passed in {}".format(len(coord)))
+                             "You passed in {}".format(len(args)))
         if not isinstance(args[0], (list,tuple)):
             color = list(args[:3])
             _usingList = False
@@ -170,13 +187,15 @@ class rgbPixel(object):
             _usingList = True
         if len(color)!=3:
             raise ValueError("You must pass in 3 NUMBER values (as a tuple or separately). "+
-                                "You passed in {}".format(len(color)))
+                             "You passed in {}".format(len(color)))
         self.setRed(color[0])
         self.setGreen(color[1])
         self.setBlue(color[2])
         return _usingList
     #END DEF
+
     def getColor(self):
+        """Gets all 3 RGB values of this picture as a tuple"""
         return self._color_as_tuple()
 
     def __setCoord(self, *args):
@@ -190,7 +209,7 @@ class rgbPixel(object):
         """
         if len(args) == 0:
             raise ValueError("You must pass in 2 NUMBER values (as a tuple or separately). "+
-                                "You passed in {}".format(len(coord)))
+                             "You passed in {}".format(len(args)))
         if not isinstance(args[0], (list,tuple)):
             coord = list(args[:2])
             _usingList = False
@@ -199,32 +218,37 @@ class rgbPixel(object):
             _usingList = True
         if len(coord)!=2:
             raise ValueError("You must pass in 2 NUMBER values (as a tuple or separately). "+
-                                "You passed in {}".format(len(coord)))
+                             "You passed in {}".format(len(coord)))
         self.__setX(coord[0])
         self.__setY(coord[1])
         return _usingList
     #END DEF
+
     def getCoord(self):
+        """Gets the X and Y coordinate of this pixel as a tuple"""
         return self._coord_as_tuple()
 
 
-  # CONVERTERS -------------------------------------------------------------------
+    # CONVERTERS ---------------------------------------------------------------
 
     def _color_as_array(self):
         """Returns the pixel's RGB values in a list format"""
         return [self.__red, self.__green, self.__blue]
+
     def _color_as_tuple(self):
         """Returns the pixel's RGB values in a tuple format"""
         return (self.__red, self.__green, self.__blue)
+
     def _coord_as_array(self):
         """Returns the pixel's RGB values in a list format"""
         return [self.__x, self.__y]
+
     def _coord_as_tuple(self):
         """Returns the pixel's RGB values in a tuple format"""
         return (self.__x, self.__y)
 
 
-  # FUN PIXEL MATH FUNCTIONS -----------------------------------------------------
+    # FUN PIXEL MATH FUNCTIONS -------------------------------------------------
 
     def cdist(self, **kwargs):
         """
@@ -275,7 +299,7 @@ class rgbPixel(object):
     #END DEF
 
 
-  # STRING FUNCTIONS -------------------------------------------------------------
+    # STRING FUNCTIONS ---------------------------------------------------------
 
     def __str__(self):
         """Returns a string representation of this object"""
@@ -284,28 +308,23 @@ class rgbPixel(object):
     #END DEF
 
 
-  # COMPARATORS ------------------------------------------------------------------
+    # COMPARATORS --------------------------------------------------------------
 
-    def __sameObject(func):
-        def wrapper(*args, **kwargs):
-            if not isinstance(args[1], args[0].__class__):
-                raise TypeError("You must compare objects of the same type. Cannot compare "+
-                                "{0} and {1}".format(args[0].__class__, args[1].__class__))
-            return func(*args, **kwargs)
-        return wrapper
-    #END DEF
     @__sameObject
     def __lt__(self, other):
+        """Less than comparison, based on average pixel value"""
         if self._avgValue() < other._avgValue():
             return True
         return False
     #END DEF
     @__sameObject
     def __eq__(self, other):
+        """Equal comparison, based on average pixel value"""
         if self._avgValue() == other._avgValue():
             return True
         return False
     #END DEF
+
     def __gt__(self, other):
         return not self.__eq__(other) and not self.__lt__(other)
     def __ne__(self, other):
@@ -314,16 +333,29 @@ class rgbPixel(object):
         return self.__eq__(other) or self.__gt__(other)
     def __le__(self, other):
         return self.__eq__(other) or self.__le__(other)
-#END CLASS
+#END CLASS ---------------------------------------------------------------------
 
 
 
-#CLASS
+
+
+
 class rgbImage(object):
+
     """
-    ---------------------
-    Class Attributes
+    A simple class for accessing attributes of an RGB Pixel
+
+    ATTRIBUTES:
+        inputFilename   String, the absolute path of the file used for input.
+                         Empty if blank image was created
+        outputFilename  String, the absolute path where the image will be saved.
+                         Empty if blank image was created
+        pixels          List, a 2-dimensional array of rgbPixel objects
+        height          Integer, the height of the picture in pixels
+        width           Integer, the width of the pixture in pixels
     """
+
+    # CLASS ATTRIBUTES -----------
     inputFilename = ""
     outputFilename = ""
 
@@ -333,9 +365,8 @@ class rgbImage(object):
 
     height = 0
     width = 0
-    """
-    ---------------------
-    """
+    # ----------------------------
+
 
     def __init__(self, filename="", saveTo="", blank=False, width=100, height=100):
         """
@@ -351,9 +382,14 @@ class rgbImage(object):
         self.__blank = blank
         if not self.__blank:
             if not filename:
-                self.inputFilename = askopenfilename( initialdir = path.expanduser("~"),
-                                            title = "Select the FILE containing the raw data",
-                                            multiple = False)
+                self.inputFilename = askopenfilename(initialdir=path.expanduser("~"),
+                                                     title="Select the FILE containing the raw data",
+                                                     filetypes=[('JPG Image', '.jpg'),
+                                                                ('JPEG Image', '.jpeg'),
+                                                                ('GIF Image', '.gif'),
+                                                                ('PNG Image', '.png')
+                                                                ],
+                                                     multiple=False)
                 if not self.inputFilename:
                     raise ValueError("You must choose a file for this class to work.")
             else:
@@ -362,20 +398,20 @@ class rgbImage(object):
                 if not path.isfile(self.inputFilename) or \
                         self.inputFilename.split(".")[-1].lower() not in acceptedExt:
                     raise ValueError("You must pass in a legitimate picture file. "+
-                                    "Use one of the following options:"+str(acceptedExt))
+                                     "Use one of the following options:"+str(acceptedExt))
             #END IF/ELSE
             if not saveTo:
                 dirname = path.dirname(self.inputFilename)
                 filename = path.basename(self.inputFilename)
-                filename = filename.split(".")[0]+"_v2."+filename.split(".")[1]
+                filename = filename.split(".")[0]+"_altered."+filename.split(".")[1]
                 self.outputFilename = path.join(dirname, filename)
             else:
                 self.outputFilename = path.abspath(saveTo)
             #END IF/ELSE
             if path.isfile(self.outputFilename):
-                print("{} will be overwritten if this file is saved. ".format(path.basename(self.outputFilename))+
-                        "Consider saving to another location."
-                    )
+                print("{} will be overwritten if this image is saved. ".format(path.basename(self.outputFilename))+
+                      "Consider saving to another location."
+                      )
             #END IF
         else:
             self.width, self.height = width, height
@@ -518,4 +554,4 @@ class rgbImage(object):
         return ("RGB Image named {}\nSize is {}x{} pixels".format(shortInput, self.width, self.height)
                 )
     #END DEF
-#END CLASS
+#END CLASS ---------------------------------------------------------------------
