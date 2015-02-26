@@ -20,7 +20,7 @@ The other modules installed are currently in developed. This includes:
 Documentation
 -----------------------------------------------------------
 Documentation, and installation instructions, are available at
-http://pwalker91.github.io/CSUMB205_Image
+http://pwalker91.github.io/CSUMB205_Multimedia
 
 
 -----------------------------------------------------------
