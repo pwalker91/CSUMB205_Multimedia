@@ -63,65 +63,156 @@
 
 <hr>
 
-<h2>
-<a id="installation-on-windows" class="anchor" href="#installation-on-windows" aria-hidden="true"><span class="octicon octicon-link"></span></a>INSTALLATION on WINDOWS</h2>
 
-<p>If you are using Windows, make sure to check the option to <em>add the</em> <strong>python.exe</strong> <em>to your path</em>. PIP will not work otherwise.
-<img src="https://cloud.githubusercontent.com/assets/6844526/6278829/204e939c-b84f-11e4-8aae-4a7f1e73a6aa.PNG" alt="What option to check">
-Be sure to change the red X to the same symbols as the above options</p>
 
-<p>Windows 8 users will also need to download and install the <a href="http://sourceforge.net/projects/numpy/files/NumPy/1.9.1/numpy-1.9.1-win32-superpack-python3.4.exe/download">numpy package</a> manually from the link given.</p>
-
-<p>Please start the Command Prompt program and try typing <code>python</code>. If you get back the error message <code>"python" is not a recognized command</code>, please restart your computer.</p>
-
-<p>You can download this package through the use of PIP, a built-in package installer that comes with Python 3.4.2. Go to the start menu and open an administrator command prompt. Then run...</p>
-
-<pre><code> pip install csumb205-multimedia
-</code></pre>
-
-<p>Before pressing enter, your Command Prompt screen should look similar to this...
-<img src="https://cloud.githubusercontent.com/assets/6844526/6278828/204da70c-b84f-11e4-9f6a-32816d371379.PNG" alt="Command to type"></p>
-
-<hr>
-
-<h2>
-<a id="installation-on-mac-osx" class="anchor" href="#installation-on-mac-osx" aria-hidden="true"><span class="octicon octicon-link"></span></a>INSTALLATION on MAC OSX</h2>
-
-<p>On Mac OSX, you will have multiple versions of Python. You <em>still</em> need to install Python 3.4.2, but you will open Terminal, and type the command...</p>
-
-<pre><code> pip3 install csumb205-multimedia
-</code></pre>
-
-<p>Before pressing enter, your Terminal screen should look like this...
-<img src="https://cloud.githubusercontent.com/assets/6844526/6278864/71274c64-b84f-11e4-8c04-254c4686cc7d.jpg" alt="Command to type"></p>
-
-<hr>
-
-<h2>
-<a id="updating-your-version" class="anchor" href="#updating-your-version" aria-hidden="true"><span class="octicon octicon-link"></span></a>UPDATING your VERSION</h2>
-
-<p>If you already downloaded the package with PIP, but see that the version number has changed, you can simply update the package using PIP. Simply type this command...</p>
-
-<pre><code> pip install --upgrade csumb205-multimedia
-</code></pre>
-
-<p>If you are on Mac OSX, please use <code>pip3</code> instead of <code>pip</code>.</p>
-
-<hr>
 
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>USAGE</h2>
 
-<p>For an introduction into how to use the different available classes, please <a href="./how_to.html">see this page</a></p>
+<h3>
+<a id="rgb-image" class="anchor" href="#rgb-image" aria-hidden="true"><span class="octicon octicon-link"></span></a>RGB IMAGE</h3>
 
-<p>For a more complete documentation of the different available classes, please <a href="./docs/html/index.html">see this page</a></p>
+<p>
+    The expected usage of this module is within a Python script. As such, to use this module, you will want
+    to include the code...
+</p>
+
+<pre><code> from simpleImage import rgbImage
+</code></pre>
+
+<p>
+    ...at the top of your file. This will allow you to use the RGB Image class, and create RGB Image objects.
+</p>
+
+<h3>
+<a id="create-an-rgb-image" class="anchor" href="#create-an-rgb-image" aria-hidden="true"><span class="octicon octicon-link"></span></a>CREATE an RGB IMAGE</h3>
+
+<p>
+    There are two ways to create an RGB Image object from an existing image. You can either pass the path to an image file, like so:
+</p>
+
+<pre><code> myImage = rgbImage("/path/to/my/image/file/IMAGE.jpg")
+</code></pre>
+
+<p>
+    ...or you can simply call the constructor with no inputs.
+</p>
+
+<pre>
+    <code> myImage = rgbImage() </code>
+</pre>
+
+<p>
+    This will open a dialog screen, where you can navigate to and choose your image file.
+</p>
+
+<p>
+    You can also make a blank image. To do this, you must pass a TRUE boolean to the constructor through the "blank" keyword.
+    You can also specify the height and width, but these will default to 100 and 100.
+</p>
+
+<pre>
+    <code> myImage = rgbImage(blank=True, height=500, width=1200)</code>
+</pre>
 
 <hr>
 
 <h3>
-<a id="pypi" class="anchor" href="#pypi" aria-hidden="true"><span class="octicon octicon-link"></span></a>PyPI:</h3>
+<a id="so-what-can-you-do" class="anchor" href="#so-what-can-you-do" aria-hidden="true"><span class="octicon octicon-link"></span></a>So, what can you DO?</h3>
 
-<p>The Python Package Index page for this package can be <a href="https://pypi.python.org/pypi/csumb205-multimedia">found here</a>.</p>
+<p>
+    Once you have created your object, there are (currently) a limited number of things you can do. You can get the height and width of your picture by accessing their respective variables.
+</p>
+<pre>
+<code> &gt;&gt;&gt; print(myImage.height)
+ 500
+ &gt;&gt;&gt; print(myImage.width)
+ 1200</code>
+</pre>
+
+<p>
+    We can also get individual pixels from the image. We have two methods for doing this. We can either get an individual pixel...
+</p>
+<pre>
+<code> a_pixel = myImage.getPixel(1,2)
+     or
+ a_pixel = myImage.getPixel( (1,2) )</code>
+</pre>
+<p>
+    Both methods will get the same pixel. The only difference if the formatting of the input. You can choose whichever is more comfortable for you.
+</p>
+
+<p>
+    We can also get all of the pixels as a Python list. We do this with the function...
+</p>
+<pre>
+    <code> all_my_pixels = myImage.getAllPixels() </code>
+</pre>
+
+<hr>
+<p>
+    Once we have a pixel (or a list of pixels), we can modify them.
+</p>
+<p>
+    Each pixel has a few basic functions that you should know about. As a pixel is a set of RGB values in a specific location, we have functions to get those values. Here are examples of them...
+</p>
+<pre>
+<code> &gt;&gt;&gt; a_pixel = myImage.getPixel( (1,2) )
+ &gt;&gt;&gt; print(a_pixel.getRed())
+ 60
+ &gt;&gt;&gt; print(a_pixel.getGreen())
+ 120
+ &gt;&gt;&gt; print(a_pixel.getBlue())
+ 20
+ &gt;&gt;&gt; print(a_pixel.getX())
+ 1
+ &gt;&gt;&gt; print(a_pixel.getY())
+ 2</code>
+</pre>
+
+<p>
+    From here, we can see the basic values of each.
+</p>
+<p>
+    A pixel also has a few basic "setter" functions. These are exemplified here...
+</p>
+<pre>
+<code> &gt;&gt;&gt; a_pixel.setRed(255)
+ &gt;&gt;&gt; a_pixel.setBlue(0)
+ &gt;&gt;&gt; a_pixel.setGreen(79)</code>
+</pre>
+<p>
+    Our pixel is now one whose RGB values are (255,79,0).
+</p>
+
+<hr>
+<p>
+    Now, back to our image. Once we have modified our pixels as we see fit, we can either view it, save it, or change the name our saved image will have.
+</p>
+<p>
+    To view the image, simply add the line or type...
+</p>
+<pre>
+    <code> myImage.show() </code>
+</pre>
+<p>
+    To change the name, call the function...
+</p>
+<pre>
+    <code> myImage.setName("A Silly Image") </code>
+</pre>
+<p>
+    NOTE: What you pass in should be a function, with no file extension
+</p>
+<p>
+    To save the image, call the function...
+</p>
+<pre>
+    <code> myImage.save() </code>
+</pre>
+<p>
+    That's it for now. Check out the more <a href="./docs/html/index.html">detailed documentation</a> for more information.
+</p>
       </section>
 
       <footer>
