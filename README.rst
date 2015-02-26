@@ -8,7 +8,7 @@ longer updated for Python 3, this package relies on **Pillow**.
 More classes are in development for manipulation of audio and video.
 
 To install:
-  1. Install [Python 3.4](https://www.python.org/downloads/), or greater
+  1. Install Python 3.4 or greater (available at https://www.python.org/downloads/)
   2. Install this project's package through the use of pip
     `pip install csumb205-multimedia`
   3. Use the developed modules within Python (currently only an RGB Image class)
