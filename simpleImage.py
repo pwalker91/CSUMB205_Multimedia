@@ -517,19 +517,11 @@ class rgbImage(object):
             ValueError - 'x' or 'y' is out of the picture's bounds
         """
         #Getting the X and Y from the passed arguments
-        if (isinstance(args[0], tuple) or isinstance(args[0], list)) and len(args[0])>1:
+        if isinstance(args[0], (tuple, list)):
             x,y = args[0]
-            if not(isinstance(x,int) and isinstance(y,int)):
-                raise ValueError("The first two elements of the tuple you passed were not integers")
-        elif (isinstance(args[0],int) and isinstance(args[1],int)):
-            if (args[0]>self.width):
-                raise ValueError("This pixel location is not within this picture bounds.")
-            if (args[1]>self.height):
-                raise ValueError("This pixel location is not within this picture bounds.")
+        else:
             x = args[0]
             y = args[1]
-        else:
-            raise ValueError("You must either pass in a 2-tuple of integers, or two integers")
         return self.pixels[y][x]
     #END DEF
 
