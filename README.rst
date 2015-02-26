@@ -1,13 +1,18 @@
 CSUMB's CST205 - Simple Multimedia Manipulation
 =======================
 
-This project offers students acces to a simple RGBImage class, which
+This project offers students access to a simple RGB Image class, which
 is built on the use of the Image module in the PIL package. As PIL is no
-longer updated for Python 3, this package relies on Pillow.
+longer updated for Python 3, this package relies on **Pillow**.
 
 More classes are in development for manipulation of audio and video.
 
-This package will assume that the user is using at least Python 3.4
+To install:
+  1. Install [Python 3.4](https://www.python.org/downloads/), or greater
+  2. Install this project's package through the use of pip
+    `pip install csumb205-multimedia`
+  3. Use the developed modules within Python (currently only an RGB Image class)
+    `from simpleImage import rgbImage`
 
 This project's Github IO page can be found here.
 http://pwalker91.github.io/CSUMB205_Multimedia
