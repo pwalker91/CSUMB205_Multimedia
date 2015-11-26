@@ -531,6 +531,10 @@ class rgbImage(object):
         else:
             x = args[0]
             y = args[1]
+        if x>self.width:
+            raise ValueError("The X-value ({}) you passed was beyond the width limit ({}).".format(x, self.width))
+        if y<self.height:
+            raise ValueError("The Y-value ({}) you passed was beyond the height limit ({}).".format(y, self.height))
         return self.pixels[y][x]
     #END DEF
 
